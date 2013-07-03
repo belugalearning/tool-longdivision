@@ -2,10 +2,9 @@ define(['constants', 'canvasclippingnode'], function(constants, CanvasClippingNo
 	'use strict';
 
 	var numberWheelPositions = constants['numberWheelPositions'];
-	var decimalPointIndex = 11;
+	var decimalPointIndex = 10;
 
 	var NumberWheel = cc.Node.extend({
-		// sectionValueIndices:[],
 		digitNodes:[],
 		buttons:[],
 		sectionWidth:80,
@@ -74,7 +73,13 @@ define(['constants', 'canvasclippingnode'], function(constants, CanvasClippingNo
 				downButton.positionIndex = i;
 				this.buttons.push(downButton);
 			};
+			this.testLabel = new cc.LabelTTF.create("Hello", "Arial", 34);
+			this.testLabel.setPosition(0, -200);
+			this.addChild(this.testLabel);
 
+			this.testLabel2 = new cc.LabelTTF.create("Hello again", "Arial", 34);
+			this.testLabel2.setPosition(0, -300);
+			this.addChild(this.testLabel2);
 		},
 
 		processTouch:function(touchLocation) {
@@ -82,6 +87,10 @@ define(['constants', 'canvasclippingnode'], function(constants, CanvasClippingNo
 				var button = this.buttons[i];
 				if (button.touched(touchLocation)) {
 					this.sectionChangeForButton(button);
+					var digitPowers = this.digitPowers();
+					var string = JSON.stringify(digitPowers);
+					this.testLabel.setString(string);
+					this.testLabel2.setString(this.value());
 				};
 			};
 		},
@@ -113,12 +122,45 @@ define(['constants', 'canvasclippingnode'], function(constants, CanvasClippingNo
 
 		},
 
-		numberOfEachUnit:function(button) {
-			var numbersOfUnits = [];
-			var numberOfDecimalPoints = this.numberOfDecimalPoints();
-			if (numberOfDecimalPoints > 1) {
-				
+		digitPowers:function(button) {
+			var decimalPointInfo = this.findDecimalPoints();
+			var digitPowers = {};
+			if (decimalPointInfo["numberOfPoints"] > 1) {
+
+			} else {
+				var positionOfPoint = decimalPointInfo["positionOfPoint"];
+				for (var i = 0; i < positionOfPoint; i++) {
+					digitPowers[i] = positionOfPoint - 1 - i;
+				};
+				for (var i = positionOfPoint + 1; i < this.digitNodes.length; i++) {
+					digitPowers[i] = positionOfPoint - i;
+				};
 			}
+			return digitPowers;
+		},
+
+		findDecimalPoints:function() {
+			var decimalPointInfo = {"numberOfPoints":0, "positionOfPoint":this.digitNodes.length};
+			var pointNotSet = true;
+			for (var i = 0; i < this.digitNodes.length; i++) {
+				if (this.digitNodes[i].numberWheelPositionIndex === decimalPointIndex) {
+					decimalPointInfo["numberOfPoints"]++;
+					if (pointNotSet) {
+						decimalPointInfo["positionOfPoint"] = i;
+						pointNotSet = false;
+					};
+				}
+			};
+			return decimalPointInfo;
+		},
+
+		value:function() {
+			var value = 0;
+			var digitPowers = this.digitPowers();
+			for (var digit in digitPowers) {
+				value += this.digitNodes[digit].numberWheelPositionIndex * Math.pow(10, digitPowers[digit]);
+			};
+			return value;
 		},
 
 	});
