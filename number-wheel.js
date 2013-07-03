@@ -5,7 +5,7 @@ define(['constants', 'canvasclippingnode'], function(constants, CanvasClippingNo
 	var decimalPointIndex = 11;
 
 	var NumberWheel = cc.Node.extend({
-		sectionValueIndices:[],
+		// sectionValueIndices:[],
 		digitNodes:[],
 		buttons:[],
 		sectionWidth:80,
@@ -20,8 +20,6 @@ define(['constants', 'canvasclippingnode'], function(constants, CanvasClippingNo
 			var offsets = [0, -40, -75, -115, -150, -192];
 
 			for (var i = 0; i < numberOfDigits; i++) {
-				this.sectionValueIndices.push(0);
-
 				var xPosition = offsets[numberOfDigits - 1] + 77 * i;
 
 				var sectionBackground = new cc.Sprite.create(s_number_wheel_section_background);
@@ -32,38 +30,33 @@ define(['constants', 'canvasclippingnode'], function(constants, CanvasClippingNo
 
 				var digitClipNode = new CanvasClippingNode();
 				digitClipNode.drawPathToClip = function() {
-					var ctx = cc.renderContext;
-					ctx.rect(0, -this.sectionHeight, this.sectionWidth, this.sectionHeight);
+					this.ctx.rect(0, -130, 100, 130);
 				}
 				sectionBackground.addChild(digitClipNode);
 
 				var digitNode = new cc.Node();
 				digitClipNode.addChild(digitNode);
-				digitNode.setPosition(0,5);
+				digitNode.setPosition(this.sectionWidth/2, this.sectionHeight/2 + 5);
+				digitNode.numberWheelPositionIndex = 0;
+				digitNode.actionInProgress = false;
 
-				digitNode.visibleLabel = new cc.LabelTTF.create(numberWheelPositions[0], "mikadobold", 34);
-				digitNode.visibleLabel.setPosition(this.sectionWidth/2, this.sectionHeight/2);
+				digitNode.visibleLabel = new cc.LabelTTF.create("", "mikadobold", 45);
 				digitNode.addChild(digitNode.visibleLabel);
 				digitNode.visibleLabel.setColor(cc.c3b(0,0,0));
 
-				digitNode.aboveLabel = new cc.LabelTTF.create(numberWheelPositions.indexWraparound(-1), "mikadobold", 34);
-				digitNode.aboveLabel.setPosition(this.sectionWidth/2, this.sectionHeight * 3/2);
+				digitNode.aboveLabel = new cc.LabelTTF.create("", "mikadobold", 45);
+				digitNode.aboveLabel.setPosition(0, this.sectionHeight);
 				digitNode.addChild(digitNode.aboveLabel);
 				digitNode.aboveLabel.setColor(cc.c3b(0,0,0));
 
-				digitNode.belowLabel = new cc.LabelTTF.create(numberWheelPositions.indexWraparound(1), "mikadobold", 34);
-				digitNode.belowLabel.setPosition(this.sectionWidth/2, this.sectionHeight * -1/2);
+				digitNode.belowLabel = new cc.LabelTTF.create("", "mikadobold", 45);
+				digitNode.belowLabel.setPosition(0, -this.sectionHeight);
 				digitNode.addChild(digitNode.belowLabel);
 				digitNode.belowLabel.setColor(cc.c3b(0,0,0));
 
+				this.setDigitNodeToNormal(digitNode);
+
 				this.digitNodes.push(digitNode);
-				
-				// var digitLabel = new cc.LabelTTF.create(this.sectionValueIndices[i], "mikadobold", 34);
-				// digitLabel.setPosition(40, 75);
-				// digitLabel.setColor(cc.c4f(0,0,0,1));
-				// digitLabel.setZOrder(-1);
-				// digitClipNode.addChild(digitLabel);
-				// this.digitLabels.push(digitLabel);
 
 				var upButton = new cc.Sprite();
 				upButton.initWithFile(s_arrow_up);
@@ -96,22 +89,29 @@ define(['constants', 'canvasclippingnode'], function(constants, CanvasClippingNo
 		sectionChangeForButton:function(button) {
 			var positionIndex = button.positionIndex;
 			var digitNode = this.digitNodes[positionIndex];
-			var sectionValueIndex = this.sectionValueIndices[positionIndex];
-			var multiplier = button.isUp ? 1 : -1;
-			var positionToMoveTo = cc.p(0, multiplier * this.sectionHeight + 5);
-			var moveAction = cc.MoveTo.create(0.3, positionToMoveTo);
-			digitNode.runAction(moveAction);
-/*			var positionIndex = button.positionIndex;
-			var label = this.digitLabels[positionIndex];
-			var sectionValueIndex = this.sectionValueIndices[positionIndex];
-			var toAdd = button.isUp ? 1 : -1;
-			sectionValueIndex += toAdd;
-			var numberOfPositions = numberWheelPositions.length;
-			sectionValueIndex %= numberOfPositions;
-			sectionValueIndex += sectionValueIndex < 0 ? numberOfPositions : 0;
-			label.setString(numberWheelPositions[sectionValueIndex]);
-			this.sectionValueIndices.splice(positionIndex, 1, sectionValueIndex);
-*/		},
+			if (!digitNode.actionInProgress) {
+				digitNode.actionInProgress = true;
+				var yPosition = button.isUp ? this.sectionHeight * 3/2 + 5 : -this.sectionHeight/2 + 5;
+				var positionToMoveTo = cc.p(this.sectionWidth/2, yPosition);
+				var moveAction = cc.MoveTo.create(0.3, positionToMoveTo);
+				var resetDigitNode = cc.CallFunc.create(this.setDigitNodeToNormal, this, positionIndex);
+				var scrollAndReset = cc.Sequence.create(moveAction, resetDigitNode);
+				digitNode.numberWheelPositionIndex += button.isUp ? 1 : -1;
+				digitNode.numberWheelPositionIndex %= numberWheelPositions.length;
+				digitNode.numberWheelPositionIndex += digitNode.numberWheelPositionIndex < 0 ? numberWheelPositions.length : 0;
+				digitNode.runAction(scrollAndReset);
+			};
+		},
+
+		setDigitNodeToNormal:function(digitNode) {
+			var numberWheelPositionIndex = digitNode.numberWheelPositionIndex;
+			digitNode.visibleLabel.setString(numberWheelPositions[numberWheelPositionIndex]);
+			digitNode.aboveLabel.setString(numberWheelPositions.indexWraparound(numberWheelPositionIndex - 1));
+			digitNode.belowLabel.setString(numberWheelPositions.indexWraparound(numberWheelPositionIndex + 1));
+			digitNode.setPosition(this.sectionWidth/2, this.sectionHeight/2 + 5);
+			digitNode.actionInProgress = false;
+
+		},
 
 		numberOfEachUnit:function(button) {
 			var numbersOfUnits = [];
