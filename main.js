@@ -3,10 +3,11 @@ require.config({
         'toollayer': '../../tools/common/toollayer',
         'numberwheel': '../../tools/long_division/number-wheel',
         'constants': '../../tools/long_division/constants',
+        'canvasclippingnode': '../../tools/long_division/canvas-clipping-node',
 	}
 });
 
-define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'constants'], function(exports, cocos2d, ToolLayer, QLayer, NumberWheel, constants) {
+define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'constants', 'canvasclippingnode'], function(exports, cocos2d, ToolLayer, QLayer, NumberWheel, constants, CanvasClippingNode) {
 	'use strict';
 
 	var Tool = ToolLayer.extend({
@@ -20,7 +21,6 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'constants']
             this.size = cc.Director.getInstance().getWinSize();
             var size = this.size;
 
-
             var clc = cc.Layer.create();
             var background = new cc.Sprite();
             background.initWithFile(s_deep_water_background);
@@ -31,6 +31,8 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'constants']
             this.numberWheel = new NumberWheel(6);
             this.numberWheel.setPosition(size.width/2, size.height/2);
             this.addChild(this.numberWheel);
+
+
 
             return this;
 		},
