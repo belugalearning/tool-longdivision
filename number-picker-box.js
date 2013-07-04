@@ -52,6 +52,7 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
             var rightButton = cc.MenuItemImage.create(s_number_picker_right, s_number_picker_right, this.scrollRight, this);
             rightButton.setPosition(327, 0);
             leftRightMenu.addChild(rightButton);
+
 		},
 
 		addBox:function() {

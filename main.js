@@ -20,6 +20,9 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
 			this.setTouchEnabled(true);
 
+            var dividend = 40;
+            var divisor = 8;
+
             this.size = cc.Director.getInstance().getWinSize();
             var size = this.size;
 
@@ -31,8 +34,13 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.addChild(clc,0);
 
             var numberPickerBox = new NumberPickerBox();
-            numberPickerBox.setPosition(400, 400);
+            numberPickerBox.setPosition(size.width/2, 400);
             this.addChild(numberPickerBox);
+
+            var barsBox = new cc.Sprite();
+            barsBox.initWithFile(s_bars_box);
+            barsBox.setPosition(size.width/2, 575);
+            this.addChild(barsBox);
 
 
 
