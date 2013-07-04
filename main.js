@@ -4,10 +4,12 @@ require.config({
         'numberwheel': '../../tools/long_division/number-wheel',
         'constants': '../../tools/long_division/constants',
         'canvasclippingnode': '../../tools/long_division/canvas-clipping-node',
+        'numberpickerbox': '../../tools/long_division/number-picker-box',
+        'numberbox': '../../tools/long_division/number-box',
 	}
 });
 
-define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'constants', 'canvasclippingnode'], function(exports, cocos2d, ToolLayer, QLayer, NumberWheel, constants, CanvasClippingNode) {
+define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpickerbox', 'constants', 'canvasclippingnode'], function(exports, cocos2d, ToolLayer, QLayer, NumberWheel, NumberPickerBox, constants, CanvasClippingNode) {
 	'use strict';
 
 	var Tool = ToolLayer.extend({
@@ -28,9 +30,10 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'constants',
             clc.addChild(background);
             this.addChild(clc,0);
 
-            this.numberWheel = new NumberWheel(6);
-            this.numberWheel.setPosition(size.width/2, size.height/2);
-            this.addChild(this.numberWheel);
+            var numberPickerBox = new NumberPickerBox();
+            numberPickerBox.setPosition(400, 400);
+            this.addChild(numberPickerBox);
+
 
 
 
@@ -39,7 +42,7 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'constants',
 
         onTouchesBegan:function(touches, event) {
             var touchLocation = this.convertTouchToNodeSpace(touches[0]);
-            this.numberWheel.processTouch(touchLocation);
+            // this.numberWheel.processTouch(touchLocation);
         },
 
 	});
