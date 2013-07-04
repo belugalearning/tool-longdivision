@@ -14,7 +14,6 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
 			var container = new cc.Sprite();
             container.initWithFile(s_number_picker_box);
             this.addChild(container);
-            // this.setPosition(400, 400);
 
             var numberPickerClipper = new CanvasClippingNode();
             numberPickerClipper.drawPathToClip = function() {
@@ -25,15 +24,9 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
 
 			this.slideNode = new cc.Node();
 			this.slideNode.setPosition(70, 100);
+			// container.addChild(this.slideNode);
 			numberPickerClipper.addChild(this.slideNode);
 
-/*            for (var i = 3; i >= 0; i--) {
-            	var numberBox = new NumberBox();
-            	numberBox.power = i;
-            	numberBox.setPosition(80 * (3-i), 0);
-            	this.slideNode.addChild(numberBox);
-            	this.numberBoxes.push(numberBox);
-            };*/
             this.firstBoxShownIndex = 0;
 
             var decimalPoint = new cc.Sprite();
@@ -41,16 +34,11 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
             decimalPoint.setPosition(290, 0);
             this.slideNode.addChild(decimalPoint);
 
-/*            for (var i = 1; i <= 4; i++) {
-            	var numberBox = new NumberBox();
-            	numberBox.power = -i;
-            	numberBox.setPosition(260 + 80 * i, 0);
-            	this.slideNode.addChild(numberBox);
-            	this.numberBoxes.push(numberBox);
-            };
-*/
 			for (var i = 0; i < 8; i++) {
 				this.addBox();
+				if (i > 6) {
+					// this.numberBoxes[i].processVisible(false);
+				};
 			};
 
             var leftRightMenu = new cc.Menu.create();
@@ -64,27 +52,6 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
             var rightButton = cc.MenuItemImage.create(s_number_picker_right, s_number_picker_right, this.scrollRight, this);
             rightButton.setPosition(327, 0);
             leftRightMenu.addChild(rightButton);
-
-
-
-
-
-/*
-            var action = cc.MoveBy.create(1, cc.p(-100, 0));
-            var scroll = cc.RepeatForever.create(action);
-            this.slideNode.runAction(scroll); */
-
-/*            var numberBox = new NumberBox();
-            numberBox.setPosition(100, 100);
-            numberPickerClipper.addChild(numberBox);
-*/
-
-
-/*            var testBox = new cc.Sprite();
-            testBox.initWithFile(s_test_big_box);
-            testBox.setPosition(300, 0);
-            numberPickerClipper.addChild(testBox);*/
-
 		},
 
 		addBox:function() {
@@ -115,6 +82,7 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
 				this.scrollToFirstBoxShown();
 				if (this.firstBoxShownIndex + this.boxesPastFirst > this.numberBoxes.length) {
 					this.addBox();
+					// this.numberBoxes[this.numberBoxes.length - 1].processVisible(false);
 				};
 			};
 		},
@@ -124,8 +92,31 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
 			var newPosition = cc.p(-positionOfBox.x + 70, positionOfBox.y + 100);
 			var scroll = cc.MoveTo.create(0.3, newPosition);
 			var setScrollingFalse = cc.CallFunc.create(function() {this.scrolling = false}, this);
-			var scrollAndSet = cc.Sequence.create(scroll, setScrollingFalse);
+			this.setVisibleBoxesBeforeSlide();
+			var setVisibleBoxes = cc.CallFunc.create(this.setVisibleBoxesAfterSlide, this);
+			var scrollAndSet = cc.Sequence.create(scroll, setScrollingFalse, setVisibleBoxes);
 			this.slideNode.runAction(scrollAndSet);
+		},
+
+		setVisibleBoxesBeforeSlide:function() {
+			for (var i = 0; i < this.numberBoxes.length; i++) {
+				if (i >= this.firstBoxShownIndex - 2 && i <= this.firstBoxShownIndex + 7) {
+					this.numberBoxes[i].processVisible(true);
+				} else {
+					this.numberBoxes[i].processVisible(false);
+				};
+				this.numberBoxes[i]
+			};
+		},
+
+		setVisibleBoxesAfterSlide:function() {
+			for (var i = 0; i < this.numberBoxes.length; i++) {
+				if (i > this.firstBoxShownIndex - 2 && i < this.firstBoxShownIndex + 7) {
+					this.numberBoxes[i].processVisible(true);
+				} else {
+					this.numberBoxes[i].processVisible(false);
+				};
+			};
 		},
 	});
 
