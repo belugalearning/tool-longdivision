@@ -28,7 +28,7 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
             var clc = cc.Layer.create();
             var background = new cc.Sprite();
-            background.initWithFile(s_deep_water_background);
+            background.initWithFile(bl.resources['images_deep_water_background']);
             background.setPosition(size.width/2, size.height/2);
             clc.addChild(background);
             this.addChild(clc,0);
@@ -38,19 +38,15 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.addChild(numberPickerBox);
 
             var barsBox = new cc.Sprite();
-            barsBox.initWithFile(s_bars_box);
+            barsBox.initWithFile(bl.resources['images_long_division_barsbox']);
             barsBox.setPosition(size.width/2, 575);
             this.addChild(barsBox);
-
-
-
 
             return this;
 		},
 
         onTouchesBegan:function(touches, event) {
             var touchLocation = this.convertTouchToNodeSpace(touches[0]);
-            // this.numberWheel.processTouch(touchLocation);
         },
 
 	});

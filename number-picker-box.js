@@ -12,7 +12,7 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
 			this._super();
 
 			var container = new cc.Sprite();
-            container.initWithFile(s_number_picker_box);
+            container.initWithFile(bl.resources['images_long_division_numberpickerbox']);
             this.addChild(container);
 
             var numberPickerClipper = new CanvasClippingNode();
@@ -30,7 +30,7 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
             this.firstBoxShownIndex = 0;
 
             var decimalPoint = new cc.Sprite();
-            decimalPoint.initWithFile(s_decimal_point);
+            decimalPoint.initWithFile(bl.resources['images_long_division_decimalpoint']);
             decimalPoint.setPosition(290, 0);
             this.slideNode.addChild(decimalPoint);
 
@@ -45,11 +45,13 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
             leftRightMenu.setPosition(0,0);
             this.addChild(leftRightMenu);
 
-            var leftButton = cc.MenuItemImage.create(s_number_picker_left, s_number_picker_left, this.scrollLeft, this);
+            var leftArrowFilename = bl.resources['images_long_division_numberpicker_left_arrow'];
+            var leftButton = cc.MenuItemImage.create(leftArrowFilename, leftArrowFilename, this.scrollLeft, this);
             leftButton.setPosition(-325, 0);
             leftRightMenu.addChild(leftButton);
 
-            var rightButton = cc.MenuItemImage.create(s_number_picker_right, s_number_picker_right, this.scrollRight, this);
+            var rightArrowFilename = bl.resources['images_long_division_numberpicker_right_arrow']
+            var rightButton = cc.MenuItemImage.create(rightArrowFilename, rightArrowFilename, this.scrollRight, this);
             rightButton.setPosition(327, 0);
             leftRightMenu.addChild(rightButton);
 
