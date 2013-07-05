@@ -8,10 +8,11 @@ require.config({
         'numberbox': '../../tools/long_division/number-box',
         'barsbox': '../../tools/long_division/bars-box',
         'bar': '../../tools/long_division/bar',
+        'magnifiedbarsbox': '../../tools/long_division/magnified-bars-box',
 	}
 });
 
-define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpickerbox', 'barsbox', 'constants', 'canvasclippingnode'], function(exports, cocos2d, ToolLayer, QLayer, NumberWheel, NumberPickerBox, BarsBox, constants, CanvasClippingNode) {
+define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpickerbox', 'barsbox', 'magnifiedbarsbox', 'constants', 'canvasclippingnode'], function(exports, cocos2d, ToolLayer, QLayer, NumberWheel, NumberPickerBox, BarsBox, MagnifiedBarsBox, constants, CanvasClippingNode) {
 	'use strict';
 
 	var Tool = ToolLayer.extend({
@@ -22,8 +23,8 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
 			this.setTouchEnabled(true);
 
-            var dividend = 999;
-            var divisor = 1;
+            var dividend = 22;
+            var divisor = 7;
 
             this.size = cc.Director.getInstance().getWinSize();
             var size = this.size;
@@ -41,16 +42,23 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
             this.numberPickerBox = new NumberPickerBox();
             this.numberPickerBox.layer = this;
-            this.numberPickerBox.setPosition(size.width/2, 400);
+            this.numberPickerBox.setPosition(375, 400);
             this.addChild(this.numberPickerBox);
 
             this.barsBox = new BarsBox(dividend, divisor);
             this.barsBox.setPosition(size.width/2, 575);
             this.addChild(this.barsBox);
 
+            this.magnifiedBarsBox = new MagnifiedBarsBox(dividend, divisor);
+            this.magnifiedBarsBox.setPosition(850, 390);
+            this.addChild(this.magnifiedBarsBox);
+
             this.testLabel = new cc.LabelTTF.create("HELLO", "mikadoBold", 24);
             this.testLabel.setPosition(size.width/2, 200);
             this.addChild(this.testLabel);
+
+            var correctDigits = this.calculateCorrectDigits(dividend, divisor);
+            var a = 5;
 
             return this;
 		},
@@ -61,7 +69,46 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
         },
 
         processDigitChange:function() {
-            this.barsBox.setBars(this.numberPickerBox.digitValues());
+            var digitValues = this.numberPickerBox.digitValues();
+            this.barsBox.setBars(digitValues);
+            this.magnifiedBarsBox.setBars(digitValues);
+        },
+
+        calculateCorrectDigits:function(dividend, divisor) {
+            var digitsBeforePoint = [];
+            var digitsAfterPoint = [];
+            var dividendString = dividend + "";
+            var remainder = 0;
+            while (dividendString !== "") {
+                remainder = 10 * remainder + parseInt(dividendString[0]);
+                var digit = Math.floor(remainder/divisor);
+                remainder %= divisor;
+                digitsBeforePoint.push(digit);
+                dividendString = dividendString.slice(1);
+            }
+            digitsAfterPoint = this.calculateCorrectDigitsAfterPoint(remainder, divisor);
+            return [digitsBeforePoint, digitsAfterPoint[0], digitsAfterPoint[1]];
+        },
+
+        calculateCorrectDigitsAfterPoint:function(dividend, divisor) {
+            var nonRecurringDigits = [];
+            var recurringDigits = [];
+            var remainders = [];
+            var remainder = dividend;
+            while (true) {
+                var index = remainders.indexOf(remainder);
+                if (index === -1) {
+                    remainders.push(remainder);
+                    remainder *= 10;
+                    nonRecurringDigits.push(Math.floor(remainder/divisor));
+                    remainder %= divisor;
+                } else {
+                    recurringDigits = nonRecurringDigits.slice(index);
+                    nonRecurringDigits = nonRecurringDigits.slice(0, index);
+                    break;
+                };
+            }
+            return [nonRecurringDigits, recurringDigits];
         },
 
 	});

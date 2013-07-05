@@ -49,9 +49,12 @@ define([], function() {
 			this.numberPickerBox.processDigitChange();
 		},
 
-		processVisible:function(visible) {
+		boxVisible:function(visible) {
 			this.setVisible(visible);
-			this.upDownMenu.setEnabled(visible);
+		},
+
+		boxEnabled:function(enabled) {
+			this.upDownMenu.setEnabled(enabled);
 		},
 	});
 

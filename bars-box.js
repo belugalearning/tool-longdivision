@@ -17,6 +17,7 @@ define(['bar'], function(Bar) {
 
 		setBars:function(digitValues) {
 			var totalLength = 0;
+			var colours = [cc.c3b(0,0,255), cc.c3b(0,255,0)];
 			for (var i = 0; i < this.bars.length; i++) {
 				this.bars[i].removeFromParent();
 			};
@@ -30,11 +31,7 @@ define(['bar'], function(Bar) {
 				var digitKey = digitKeys[i];
 				for (var j = 0; j < digitValues[digitKey]; j++) {
 					var bar = new Bar();
-
-					var red = 125 + Math.floor(Math.random() * 125);
-					var green = 125 + Math.floor(Math.random() * 125);
-					var blue = 125 + Math.floor(Math.random() * 125);
-					bar.barSprite.setColor(cc.c3b(red, green, blue));
+					bar.barSprite.setColor(colours[this.bars.length % 2]);
 
 					var length = Math.pow(10, digitKey) * this.scaleFactor();
 					bar.setLength(length);

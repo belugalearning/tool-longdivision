@@ -16,17 +16,17 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
             container.initWithFile(bl.resources['images_long_division_numberpickerbox']);
             this.addChild(container);
 
-            var numberPickerClipper = new CanvasClippingNode();
-            numberPickerClipper.drawPathToClip = function() {
+            this.numberPickerClipper = new CanvasClippingNode();
+            this.numberPickerClipper.drawPathToClip = function() {
                 this.ctx.rect(1, -203, 588, 203);
             },
-            numberPickerClipper.setZOrder(-1);
-            container.addChild(numberPickerClipper);
+            this.numberPickerClipper.setZOrder(-1);
+            container.addChild(this.numberPickerClipper);
 
 			this.slideNode = new cc.Node();
-			this.slideNode.setPosition(70, 100);
-			// container.addChild(this.slideNode);
-			numberPickerClipper.addChild(this.slideNode);
+			this.slideNode.setPosition(70, 80);
+			container.addChild(this.slideNode);
+			// this.numberPickerClipper.addChild(this.slideNode);
 
             this.firstBoxShownIndex = 0;
 
@@ -40,6 +40,8 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
 			};
 
 			this.setVisibleBoxesAfterSlide();
+
+			this.setupLabelNodes();
 
             var leftRightMenu = new cc.Menu.create();
             leftRightMenu.setPosition(0,0);
@@ -57,6 +59,36 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
 
 		},
 
+		setupLabelNodes:function() {
+			var numberLabelKeySuffixes = ['1000', '100', '10', '1', '1over10', '1over100', '1over1000'];
+			var powerLabelKeySuffixes = ['10+3', '10+2', '10+1', '1', '10_1', '10_2', '10_3'];
+			var wordLabelKeySuffixes = ['thousands', 'hundreds', 'tens', 'units', 'tenths', 'hundredths', 'thousandths'];
+
+			this.numberLabelNode = this.setupNodeWithSuffixes(numberLabelKeySuffixes);
+			this.slideNode.addChild(this.numberLabelNode);
+			// this.numberLabelNode.setVisible(false);
+
+			this.powerLabelNode = this.setupNodeWithSuffixes(powerLabelKeySuffixes);
+			this.slideNode.addChild(this.powerLabelNode);
+			this.powerLabelNode.setVisible(false);
+
+			this.wordLabelNode = this.setupNodeWithSuffixes(wordLabelKeySuffixes);
+			this.slideNode.addChild(this.wordLabelNode);
+			this.wordLabelNode.setVisible(false);
+		},
+
+		setupNodeWithSuffixes:function(keySuffixes) {
+			var labelNode = new cc.Node();
+			labelNode.setPosition(0, 100);
+			for (var i = 0; i < keySuffixes.length; i++) {
+				var label = new cc.Sprite();
+				label.initWithFile(bl.resources['images_long_division_labels_label_' + keySuffixes[i]]);
+				label.setPosition(this.numberBoxes[i].getPosition().x, 0);
+				labelNode.addChild(label);
+			};
+			return labelNode;
+		},
+
 		addBox:function() {
 			var numberBox = new NumberBox();
 			numberBox.numberPickerBox = this;
@@ -67,6 +99,8 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
 			numberBox.setPosition(xPosition, 0);
 			this.slideNode.addChild(numberBox);
 			this.numberBoxes[boxIndex] = numberBox;
+			numberBox.boxVisible(false);
+			numberBox.boxEnabled(false);
 		},
 
 		scrollLeft:function() {
@@ -86,14 +120,14 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
 				this.scrollToFirstBoxShown();
 				if (this.firstBoxShownIndex + this.boxesPastFirst > this.numberBoxes.length) {
 					this.addBox();
-					// this.numberBoxes[this.numberBoxes.length - 1].processVisible(false);
+					// this.numberBoxes[this.numberBoxes.length - 1].setVisible(false);
 				};
 			};
 		},
 
 		scrollToFirstBoxShown:function() {
 			var positionOfBox = this.numberBoxes[this.firstBoxShownIndex].getPosition();
-			var newPosition = cc.p(-positionOfBox.x + 70, positionOfBox.y + 100);
+			var newPosition = cc.p(-positionOfBox.x + 70, this.slideNode.getPosition().y);
 			var scroll = cc.MoveTo.create(0.3, newPosition);
 			var setScrollingFalse = cc.CallFunc.create(function() {this.scrolling = false}, this);
 			this.setVisibleBoxesBeforeSlide();
@@ -105,20 +139,25 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
 		setVisibleBoxesBeforeSlide:function() {
 			for (var i = 0; i < this.numberBoxes.length; i++) {
 				if (i >= this.firstBoxShownIndex - 2 && i <= this.firstBoxShownIndex + 7) {
-					this.numberBoxes[i].processVisible(true);
+					this.numberBoxes[i].boxVisible(true);
 				} else {
-					this.numberBoxes[i].processVisible(false);
+					this.numberBoxes[i].boxVisible(false);
 				};
-				this.numberBoxes[i]
+				this.numberBoxes[i].boxEnabled(false);
 			};
 		},
 
 		setVisibleBoxesAfterSlide:function() {
 			for (var i = 0; i < this.numberBoxes.length; i++) {
 				if (i > this.firstBoxShownIndex - 2 && i < this.firstBoxShownIndex + 7) {
-					this.numberBoxes[i].processVisible(true);
+					this.numberBoxes[i].boxVisible(true);
 				} else {
-					this.numberBoxes[i].processVisible(false);
+					this.numberBoxes[i].boxVisible(false);
+				};
+				if (i > this.firstBoxShownIndex - 1 && i < this.firstBoxShownIndex + 7) {
+					this.numberBoxes[i].boxEnabled(true);
+				} else {
+					this.numberBoxes[i].boxEnabled(false);
 				};
 			};
 		},
