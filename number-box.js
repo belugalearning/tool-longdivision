@@ -6,6 +6,7 @@ define([], function() {
 		power:null,
 		digitLabel:null,
 		upDownMenu:null,
+		numberPickerBox:null,
 
 		ctor:function() {
 			this._super();
@@ -45,6 +46,7 @@ define([], function() {
 		processDigitChange:function() {
 			this.digit = this.digit.numberInCorrectRange(0, 10);
 			this.digitLabel.setString(this.digit);
+			this.numberPickerBox.processDigitChange();
 		},
 
 		processVisible:function(visible) {

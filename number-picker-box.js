@@ -7,6 +7,7 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
 		boxesPastFirst:8,
 		firstBoxShownIndex:null,
 		scrolling:false,
+		layer:null,
 
 		ctor:function() {
 			this._super();
@@ -36,10 +37,9 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
 
 			for (var i = 0; i < 8; i++) {
 				this.addBox();
-				if (i > 6) {
-					// this.numberBoxes[i].processVisible(false);
-				};
 			};
+
+			this.setVisibleBoxesAfterSlide();
 
             var leftRightMenu = new cc.Menu.create();
             leftRightMenu.setPosition(0,0);
@@ -59,6 +59,7 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
 
 		addBox:function() {
 			var numberBox = new NumberBox();
+			numberBox.numberPickerBox = this;
 			var boxIndex = this.numberBoxes.length;
 			numberBox.power = 3 - boxIndex;
 			var xPosition = 80 * boxIndex;
@@ -120,6 +121,48 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
 					this.numberBoxes[i].processVisible(false);
 				};
 			};
+		},
+
+		digitValues:function() {
+			var digitValues = {};
+			for (var i = 0; i < this.numberBoxes.length; i++) {
+				var numberBox = this.numberBoxes[i];
+				digitValues[numberBox.power] = numberBox.digit;
+			};
+			return digitValues;
+		},
+
+		value:function() {
+			var value = 0;
+			var digitValues = this.digitValues();
+			for (var digit in digitValues) {
+				value += digitValues[digit] * Math.pow(10, digit);
+			}
+			return value;
+		},
+
+		valueString:function() {
+			var valueString = "";
+			for (var i = 0; i < this.numberBoxes.length; i++) {
+				if (this.numberBoxes[i].power === -1) {
+					valueString += ".";
+				};
+				valueString += this.numberBoxes[i].digit;
+			};
+			while (valueString[valueString.length - 1] === "0") {
+				valueString = valueString.slice(0, valueString.length - 1);
+			}
+			while (valueString[0] === "0" && valueString[1] !== ".") {
+				valueString = valueString.slice(1);
+			}
+			if (valueString[valueString.length - 1] === ".") {
+				valueString = valueString.slice(0, valueString.length - 1);
+			};
+			return valueString;
+		},
+
+		processDigitChange:function() {
+			this.layer.processDigitChange();
 		},
 	});
 

@@ -6,10 +6,12 @@ require.config({
         'canvasclippingnode': '../../tools/long_division/canvas-clipping-node',
         'numberpickerbox': '../../tools/long_division/number-picker-box',
         'numberbox': '../../tools/long_division/number-box',
+        'barsbox': '../../tools/long_division/bars-box',
+        'bar': '../../tools/long_division/bar',
 	}
 });
 
-define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpickerbox', 'constants', 'canvasclippingnode'], function(exports, cocos2d, ToolLayer, QLayer, NumberWheel, NumberPickerBox, constants, CanvasClippingNode) {
+define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpickerbox', 'barsbox', 'constants', 'canvasclippingnode'], function(exports, cocos2d, ToolLayer, QLayer, NumberWheel, NumberPickerBox, BarsBox, constants, CanvasClippingNode) {
 	'use strict';
 
 	var Tool = ToolLayer.extend({
@@ -20,8 +22,8 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
 			this.setTouchEnabled(true);
 
-            var dividend = 40;
-            var divisor = 8;
+            var dividend = 999;
+            var divisor = 1;
 
             this.size = cc.Director.getInstance().getWinSize();
             var size = this.size;
@@ -33,20 +35,33 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             clc.addChild(background);
             this.addChild(clc,0);
 
-            var numberPickerBox = new NumberPickerBox();
-            numberPickerBox.setPosition(size.width/2, 400);
-            this.addChild(numberPickerBox);
+            var questionLabel = new cc.LabelTTF.create(dividend + " divided by " + divisor, "mikadoBold", 30);
+            questionLabel.setPosition(size.width/2, 700);
+            this.addChild(questionLabel);
 
-            var barsBox = new cc.Sprite();
-            barsBox.initWithFile(bl.resources['images_long_division_barsbox']);
-            barsBox.setPosition(size.width/2, 575);
-            this.addChild(barsBox);
+            this.numberPickerBox = new NumberPickerBox();
+            this.numberPickerBox.layer = this;
+            this.numberPickerBox.setPosition(size.width/2, 400);
+            this.addChild(this.numberPickerBox);
+
+            this.barsBox = new BarsBox(dividend, divisor);
+            this.barsBox.setPosition(size.width/2, 575);
+            this.addChild(this.barsBox);
+
+            this.testLabel = new cc.LabelTTF.create("HELLO", "mikadoBold", 24);
+            this.testLabel.setPosition(size.width/2, 200);
+            this.addChild(this.testLabel);
 
             return this;
 		},
 
         onTouchesBegan:function(touches, event) {
             var touchLocation = this.convertTouchToNodeSpace(touches[0]);
+            this.testLabel.setString(JSON.stringify(this.numberPickerBox.valueString()));
+        },
+
+        processDigitChange:function() {
+            this.barsBox.setBars(this.numberPickerBox.digitValues());
         },
 
 	});
