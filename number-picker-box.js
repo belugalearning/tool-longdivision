@@ -25,8 +25,8 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
 
 			this.slideNode = new cc.Node();
 			this.slideNode.setPosition(70, 80);
-			container.addChild(this.slideNode);
-			// this.numberPickerClipper.addChild(this.slideNode);
+			// container.addChild(this.slideNode);
+			this.numberPickerClipper.addChild(this.slideNode);
 
             this.firstBoxShownIndex = 0;
 

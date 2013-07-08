@@ -9,10 +9,11 @@ require.config({
         'barsbox': '../../tools/long_division/bars-box',
         'bar': '../../tools/long_division/bar',
         'magnifiedbarsbox': '../../tools/long_division/magnified-bars-box',
+        'divisiontable': '../../tools/long_division/division-table',
 	}
 });
 
-define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpickerbox', 'barsbox', 'magnifiedbarsbox', 'constants', 'canvasclippingnode'], function(exports, cocos2d, ToolLayer, QLayer, NumberWheel, NumberPickerBox, BarsBox, MagnifiedBarsBox, constants, CanvasClippingNode) {
+define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpickerbox', 'barsbox', 'magnifiedbarsbox', 'divisiontable', 'constants', 'canvasclippingnode'], function(exports, cocos2d, ToolLayer, QLayer, NumberWheel, NumberPickerBox, BarsBox, MagnifiedBarsBox, DivisionTable, constants, CanvasClippingNode) {
 	'use strict';
 
 	var Tool = ToolLayer.extend({
@@ -25,6 +26,7 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
             var dividend = 22;
             var divisor = 7;
+            var correctDigits = this.calculateCorrectDigits(dividend, divisor);
 
             this.size = cc.Director.getInstance().getWinSize();
             var size = this.size;
@@ -36,8 +38,13 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             clc.addChild(background);
             this.addChild(clc,0);
 
+            var title = new cc.Sprite();
+            title.initWithFile(bl.resources['images_long_division_title_longdivision']);
+            title.setPosition(size.width/2, 700);
+            this.addChild(title);
+
             var questionLabel = new cc.LabelTTF.create(dividend + " divided by " + divisor, "mikadoBold", 30);
-            questionLabel.setPosition(size.width/2, 700);
+            questionLabel.setPosition(size.width/2, 625);
             this.addChild(questionLabel);
 
             this.numberPickerBox = new NumberPickerBox();
@@ -46,32 +53,37 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.addChild(this.numberPickerBox);
 
             this.barsBox = new BarsBox(dividend, divisor);
+            this.barsBox.correctDigits = correctDigits;
             this.barsBox.setPosition(size.width/2, 575);
             this.addChild(this.barsBox);
 
             this.magnifiedBarsBox = new MagnifiedBarsBox(dividend, divisor);
+            this.magnifiedBarsBox.barsBox.correctDigits = correctDigits;
             this.magnifiedBarsBox.setPosition(850, 390);
             this.addChild(this.magnifiedBarsBox);
 
-            this.testLabel = new cc.LabelTTF.create("HELLO", "mikadoBold", 24);
+            this.divisionTable = new DivisionTable(divisor);
+            this.divisionTable.setPosition(size.width/2, this.divisionTable.getContentSize().height/2);
+            this.divisionTable.setupTable(this.numberPickerBox.digitValues());
+            this.addChild(this.divisionTable);
+
+/*            this.testLabel = new cc.LabelTTF.create("HELLO", "mikadoBold", 24);
             this.testLabel.setPosition(size.width/2, 200);
             this.addChild(this.testLabel);
-
-            var correctDigits = this.calculateCorrectDigits(dividend, divisor);
-            var a = 5;
-
+*/
             return this;
 		},
 
         onTouchesBegan:function(touches, event) {
             var touchLocation = this.convertTouchToNodeSpace(touches[0]);
-            this.testLabel.setString(JSON.stringify(this.numberPickerBox.valueString()));
+            //this.testLabel.setString(JSON.stringify(this.numberPickerBox.valueString()));
         },
 
         processDigitChange:function() {
             var digitValues = this.numberPickerBox.digitValues();
             this.barsBox.setBars(digitValues);
             this.magnifiedBarsBox.setBars(digitValues);
+            this.divisionTable.setupTable(digitValues);
         },
 
         calculateCorrectDigits:function(dividend, divisor) {

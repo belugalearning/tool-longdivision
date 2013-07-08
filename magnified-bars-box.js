@@ -7,15 +7,16 @@ define(['canvasclippingnode', 'barsbox'], function(CanvasClippingNode, BarsBox) 
 			this.initWithFile(bl.resources['images_long_division_magnifyingglass']);
 			var clipperNode = new CanvasClippingNode();
 			clipperNode.drawPathToClip = function() {
-				this.ctx.arc(112, -117, 87, 0, 2 * Math.PI, false);
+				this.ctx.arc(112, -117, 90, 0, 2 * Math.PI, false);
 			}
 			clipperNode.setPosition(0,0);
+			clipperNode.setZOrder(-1);
 			this.addChild(clipperNode);
 			var testBox = new cc.Sprite();
 			// testBox.initWithFile(bl.resources['images_long_division_testbigwhitebox']);
 			// clipperNode.addChild(testBox);
 
-			var magnifyFactor = 5;
+			var magnifyFactor = 100;
 
 			this.barsBox = new BarsBox(dividend / magnifyFactor, divisor);
 			this.barsBox.setPosition(-260, 100);

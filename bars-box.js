@@ -13,6 +13,9 @@ define(['bar'], function(Bar) {
 			this.barsNode.setPosition(0, -4);
 			this.addChild(this.barsNode);
 			this.bars = [];
+			// this.testLabel = new cc.LabelTTF.create("Hello", "mikadoBold", 24);
+			// this.testLabel.setPosition()
+			// this.addChild(this.testLabel);
 		},
 
 		setBars:function(digitValues) {
@@ -42,12 +45,62 @@ define(['bar'], function(Bar) {
 					totalLength += length;
 				};
 			};
+			if (this.isTooBig(digitValues)) {
+				var overColour = cc.c3b(255,0,0);
+				for (var i = 0; i < this.bars.length; i++) {
+					this.bars[i].barSprite.setColor(overColour);
+				};
+			};
 		},
 
 		scaleFactor:function() {
 			var boxLength = this.getContentSize().width;
 			return boxLength * this.divisor / this.dividend;
 		},
+
+		isTooBig:function(digitValues) {
+			var tooBig;
+			var digitsBeforePoint = this.correctDigits[0];
+			var numberOfDigits = digitsBeforePoint.length;
+			if (numberOfDigits > 4) {
+				return false;
+			};
+			for (var i = 0; i < 4 - numberOfDigits; i++) {
+				digitsBeforePoint.splice(1, 0, 0);
+			};
+			for (var i = digitsBeforePoint.length - 1; i >= 0; i--) {
+				var enteredDigit = digitValues[i];
+				var correctDigit = digitsBeforePoint[3 - i];
+				if (enteredDigit > correctDigit) {
+					return true;
+				} else if (enteredDigit < correctDigit) {
+					return false;
+				};
+			};
+			var index = 0;
+			var nonRecurringDigits = this.correctDigits[1];
+			var recurringDigits = this.correctDigits[2];
+			while (true) {
+				if (digitValues[-index-1] === undefined) {
+					return false;
+				};
+				var enteredDigit = digitValues[-index-1];
+				var correctDigit = null;
+				if (index < nonRecurringDigits.length) {
+					correctDigit = nonRecurringDigits[index];
+				} else {
+					correctDigit = recurringDigits[(index - nonRecurringDigits.length) % recurringDigits.length];
+				};
+				if (enteredDigit > correctDigit) {
+					return true;
+				} else if (enteredDigit < correctDigit) {
+					return false;
+				};
+				index++;
+			};
+		}
+
+
 
 	});
 
