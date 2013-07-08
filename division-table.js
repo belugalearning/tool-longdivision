@@ -6,18 +6,19 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			this._super();
 			this.initWithFile(bl.resources['images_long_division_table_sectionbox']);
 			this.divisor = divisor;
+			this.scrolling = false;
 			var clippingNode = new CanvasClippingNode();
 			clippingNode.drawPathToClip = function() {
-				this.ctx.rect(0, -200, 600, 200);
+				this.ctx.rect(0, -203, 600, 203);
 			};
 			this.addChild(clippingNode);
 			this.slideNode = new cc.Node();
 			clippingNode.addChild(this.slideNode);
 			var upButtonFilename = bl.resources['images_long_division_table_up_arrow'];
-			var upButton = new cc.MenuItemImage.create(upButtonFilename, upButtonFilename, this.scrollUp, this);
+			var upButton = new cc.MenuItemImage.create(upButtonFilename, upButtonFilename, this.scrollDown, this);
 			upButton.setPosition(0, 55);
 			var downButtonFilename = bl.resources['images_long_division_table_down_arrow'];
-			var downButton = new cc.MenuItemImage.create(downButtonFilename, downButtonFilename, this.scrollDown, this);
+			var downButton = new cc.MenuItemImage.create(downButtonFilename, downButtonFilename, this.scrollUp, this);
 			downButton.setPosition(0, -55);
 			var upDownMenu = new cc.Menu.create(upButton, downButton);
 			upDownMenu.setPosition(525, 90);
@@ -98,13 +99,22 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 		},
 
 		scrollUp:function() {
-			var action = cc.MoveBy.create(0.3, cc.p(0, 50));
-			this.slideNode.runAction(action);
+			this.scroll(true);
 		},
 
 		scrollDown:function() {
-			var action = cc.MoveBy.create(0.3, cc.p(0, -50));
-			this.slideNode.runAction(action);
+			this.scroll(false);
+		},
+
+		scroll:function(up) {
+			if (!this.scrolling) {
+				this.scrolling = true;
+				var yChange = up ? 50 : -50;
+				var moveAction = cc.MoveBy.create(0.3, cc.p(0, yChange));
+				var setScrollingFalse = cc.CallFunc.create(function() {this.scrolling = false}, this);
+				var moveAndSet = cc.Sequence.create(moveAction, setScrollingFalse);
+				this.slideNode.runAction(moveAndSet);
+			};
 		},
 	});
 

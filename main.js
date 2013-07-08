@@ -24,8 +24,8 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
 			this.setTouchEnabled(true);
 
-            var dividend = 22;
-            var divisor = 7;
+            var dividend = 91;
+            var divisor = 15;
             var correctDigits = this.calculateCorrectDigits(dividend, divisor);
 
             this.size = cc.Director.getInstance().getWinSize();
@@ -43,23 +43,43 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             title.setPosition(size.width/2, 700);
             this.addChild(title);
 
+            var questionBox = new cc.Sprite();
+            questionBox.initWithFile(bl.resources['images_long_division_question_tray']);
+            questionBox.setPosition(size.width/2, 600);
+            this.addChild(questionBox);
+
             var questionLabel = new cc.LabelTTF.create(dividend + " divided by " + divisor, "mikadoBold", 30);
-            questionLabel.setPosition(size.width/2, 625);
-            this.addChild(questionLabel);
+            questionLabel.setPosition(questionBox.getAnchorPointInPoints());
+            questionBox.addChild(questionLabel);
 
             this.numberPickerBox = new NumberPickerBox();
             this.numberPickerBox.layer = this;
-            this.numberPickerBox.setPosition(375, 400);
+            this.numberPickerBox.setPosition(375, 335);
             this.addChild(this.numberPickerBox);
+
+            var barsBoxNode = new cc.Node();
+            barsBoxNode.setPosition(size.width/2, 500);
+            this.addChild(barsBoxNode);
 
             this.barsBox = new BarsBox(dividend, divisor);
             this.barsBox.correctDigits = correctDigits;
-            this.barsBox.setPosition(size.width/2, 575);
-            this.addChild(this.barsBox);
+            this.barsBox.setPosition(0, -22);
+            barsBoxNode.addChild(this.barsBox);
+            var barsBoundingBox = this.barsBox.getBoundingBox();
+
+            var lowEdgeLabel = new cc.LabelTTF.create("0", "mikadoBold", 24);
+            var barsBoxLeftEdge = barsBoundingBox.origin.x;
+            lowEdgeLabel.setPosition(barsBoxLeftEdge, 28);
+            barsBoxNode.addChild(lowEdgeLabel);
+
+            var highEdgeLabel = new cc.LabelTTF.create(dividend, "mikadoBold", 24);
+            var barsBoxRightEdge = barsBoundingBox.origin.x + barsBoundingBox.size.width;
+            highEdgeLabel.setPosition(barsBoxRightEdge, 28);
+            barsBoxNode.addChild(highEdgeLabel);
 
             this.magnifiedBarsBox = new MagnifiedBarsBox(dividend, divisor);
             this.magnifiedBarsBox.barsBox.correctDigits = correctDigits;
-            this.magnifiedBarsBox.setPosition(850, 390);
+            this.magnifiedBarsBox.setPosition(850, 325);
             this.addChild(this.magnifiedBarsBox);
 
             this.divisionTable = new DivisionTable(divisor);

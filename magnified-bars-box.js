@@ -16,7 +16,7 @@ define(['canvasclippingnode', 'barsbox'], function(CanvasClippingNode, BarsBox) 
 			// testBox.initWithFile(bl.resources['images_long_division_testbigwhitebox']);
 			// clipperNode.addChild(testBox);
 
-			var magnifyFactor = 100;
+			var magnifyFactor = 10;
 
 			this.barsBox = new BarsBox(dividend / magnifyFactor, divisor);
 			this.barsBox.setPosition(-260, 100);
