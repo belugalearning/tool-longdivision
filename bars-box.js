@@ -57,12 +57,12 @@ define(['bar'], function(Bar) {
 					var toolTip = new cc.Sprite();
 					toolTip.initWithFile(bl.resources['images_long_division_bar_tooltip']);
 					toolTip.setPosition(totalLength, 77);
+					var toolTipWidth = toolTip.getContentSize().width;
 					var totalValueRounded = Math.round(totalValue * 1000)/1000;
 					var toolTipLabel = new cc.LabelTTF.create(totalValueRounded, "mikadoBold", 16);
 					toolTipLabel.setColor(cc.c3b(0,0,0));
 					toolTipLabel.setPosition(32, 30);
-					var overlapPreviousBox = this.toolTips.length !== 0 && cc.rectIntersectsRect(toolTip.getBoundingBox(), this.toolTips[this.toolTips.length - 1].getBoundingBox())
-					if (!overlapPreviousBox) {
+					if (length > toolTipWidth) {
 						this.toolTipNode.addChild(toolTip);
 						toolTip.addChild(toolTipLabel);
 						this.toolTips.push(toolTip);

@@ -7,6 +7,7 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			this.initWithFile(bl.resources['images_long_division_table_sectionbox']);
 			this.divisor = divisor;
 			this.scrolling = false;
+			this.numberOfRows = 0;
 			var clippingNode = new CanvasClippingNode();
 			clippingNode.drawPathToClip = function() {
 				this.ctx.rect(0, -203, 600, 203);
@@ -36,20 +37,27 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 
 		clearSlideNode:function() {
 			this.slideNode.removeAllChildren();
-			this.slideNode.setPosition(0,0);
+			// this.slideNode.setPosition(0,0);
 		},
 
 		setupTable:function(digitValues) {
 			this.clearSlideNode();
 			this.yPosition = 165;
 			var power = 3;
-			this.total = 0;
+			this.total = "0";
+			var previousNumberOfRows = this.numberOfRows;
+			this.numberOfRows = 0;
 			while (digitValues[power] !== undefined) {
 				var digit = digitValues[power];
 				if (digit !== 0) {
 					this.setupTableRow(digit, power);
 				};
 				power--;
+			};
+			if (this.numberOfRows < previousNumberOfRows) {
+				var currentYPosition = this.slideNode.getPosition().y;
+				var rowCorrector = Math.min(this.numberOfRows, 3);
+				this.slideNode.setPosition(0, Math.min(50 * (this.numberOfRows - rowCorrector), currentYPosition));
 			};
 			this.answerLabel.setString(this.total);
 		},
@@ -75,7 +83,7 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			unitBox.initWithFile(bl.resources['images_long_division_table_box'])
 			unitBox.setPosition(150, 0);
 			rowNode.addChild(unitBox);
-			var unit = this.divisor * Math.pow(10, power);
+			var unit = this.numberTimesPowerOfTenString(this.divisor, power);
 			var unitLabel = new cc.LabelTTF.create(unit, "mikadoBold", 24);
 			unitLabel.setPosition(unitBox.getAnchorPointInPoints());
 			unitBox.addChild(unitLabel);
@@ -89,21 +97,26 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			resultBox.initWithFile(bl.resources['images_long_division_table_box']);
 			resultBox.setPosition(300, 0);
 			rowNode.addChild(resultBox);
-			var result = unit * digit;
+			var result = this.numberTimesPowerOfTenString(this.divisor * digit, power);
 			var resultLabel = new cc.LabelTTF.create(result, "mikadoBold", 24);
 			resultLabel.setPosition(resultBox.getAnchorPointInPoints());
 			resultBox.addChild(resultLabel);
-			this.total += result;
+			this.total = this.addNumberStrings(this.total, result);
 
 			this.yPosition -= 50;
+			this.numberOfRows++;
 		},
 
 		scrollUp:function() {
-			this.scroll(true);
+			if (this.slideNode.getPosition().y < 50 * (this.numberOfRows - 3)) {
+				this.scroll(true);
+			};
 		},
 
 		scrollDown:function() {
-			this.scroll(false);
+			if (this.slideNode.getPosition().y > 0) {
+				this.scroll(false);
+			};
 		},
 
 		scroll:function(up) {
@@ -115,6 +128,81 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 				var moveAndSet = cc.Sequence.create(moveAction, setScrollingFalse);
 				this.slideNode.runAction(moveAndSet);
 			};
+		},
+
+		numberTimesPowerOfTenString:function(numberOrString, power) {
+			var numberString = numberOrString + "";
+			var numberStringLength = numberString.length;
+			if (power >= 0) {
+				for (var i = 0; i < power; i++) {
+					numberString += "0";
+				};
+			} else if (power <= -numberStringLength) {
+				for (var i = 0; i < -power - numberStringLength; i++) {
+					numberString = "0" + numberString;
+				};
+				numberString = "0." + numberString;
+			} else {
+				var breakIndex = numberStringLength + power;
+				var beforePoint = numberString.slice(0, breakIndex);
+				var afterPoint = numberString.slice(breakIndex);
+				numberString = beforePoint + "." + afterPoint;
+			};
+			numberString = numberString.removeUnnecessaryZerosFromNumberString();
+			return numberString;
+		},
+
+		addNumberStrings:function(firstString, secondString) {
+			var digitsAfterPoints = [];
+			var strings = [firstString, secondString];
+			var stringArrays = [];
+			for (var i = 0; i < strings.length; i++) {
+				var string = strings[i];
+				if (string.indexOf(".") !== -1) {
+					var digitAfterPoint = string.split(".")[1].length;
+					digitsAfterPoints.push(digitAfterPoint);
+				} else {
+					digitsAfterPoints.push(0);
+				};
+			};
+			var powerToRaiseBy = digitsAfterPoints.length > 0 ? Math.max.apply(null, digitsAfterPoints) : 0;
+			for (var i = 0; i < strings.length; i++) {
+				var stringArray = strings[i].split("");
+				var pointIndex = stringArray.indexOf(".");
+				if (pointIndex !== -1) {
+					stringArray.splice(pointIndex, 1);
+				};
+				for (var j = 0; j < powerToRaiseBy - digitsAfterPoints[i]; j++) {
+					stringArray.push("0");
+				};
+				stringArrays.push(stringArray);
+			};
+			var sumArray = this.addDigitArrays(stringArrays[0], stringArrays[1]);
+			var sumString = sumArray.join("");
+			var sumStringCorrected = this.numberTimesPowerOfTenString(sumString, -powerToRaiseBy);
+			return sumStringCorrected
+		},
+
+		addDigitArrays:function(firstArray, secondArray) {
+			var sumArray = [];
+			var maxLength = Math.max(firstArray.length, secondArray.length);
+			var arrays = [firstArray, secondArray, sumArray];
+			for (var i = 0; i < arrays.length; i++) {
+				var array = arrays[i];
+				var arrayLength = array.length;
+				for (var j = 0; j < arrayLength; j++) {
+					array.splice(j, 1, parseInt(array[j]));
+				};
+				for (var j = 0; j < maxLength - arrayLength + 1; j++) {
+					array.splice(0,0,0);
+				};
+			};
+			for (var i = firstArray.length - 1; i >= 1; i--) {
+				var totalThisDigit = firstArray[i] + secondArray[i] + sumArray[i];
+				sumArray[i] = totalThisDigit % 10;
+				sumArray[i-1] = Math.floor(totalThisDigit/10);
+			};
+			return sumArray;
 		},
 	});
 

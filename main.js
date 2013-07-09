@@ -24,8 +24,8 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
 			this.setTouchEnabled(true);
 
-            var dividend = 91;
-            var divisor = 15;
+            var dividend = 22;
+            var divisor = 7;
             var correctDigits = this.calculateCorrectDigits(dividend, divisor);
 
             this.size = cc.Director.getInstance().getWinSize();
@@ -70,11 +70,13 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             var lowEdgeLabel = new cc.LabelTTF.create("0", "mikadoBold", 24);
             var barsBoxLeftEdge = barsBoundingBox.origin.x;
             lowEdgeLabel.setPosition(barsBoxLeftEdge, 28);
+            lowEdgeLabel.setZOrder(-1);
             barsBoxNode.addChild(lowEdgeLabel);
 
             var highEdgeLabel = new cc.LabelTTF.create(dividend, "mikadoBold", 24);
             var barsBoxRightEdge = barsBoundingBox.origin.x + barsBoundingBox.size.width;
             highEdgeLabel.setPosition(barsBoxRightEdge, 28);
+            highEdgeLabel.setZOrder(-1);
             barsBoxNode.addChild(highEdgeLabel);
 
             this.magnifiedBarsBox = new MagnifiedBarsBox(dividend, divisor);
