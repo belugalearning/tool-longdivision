@@ -10,10 +10,11 @@ require.config({
         'bar': '../../tools/long_division/bar',
         'magnifiedbarsbox': '../../tools/long_division/magnified-bars-box',
         'divisiontable': '../../tools/long_division/division-table',
+        'settingslayer': '../../tools/long_division/settings-layer',
 	}
 });
 
-define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpickerbox', 'barsbox', 'magnifiedbarsbox', 'divisiontable', 'constants', 'canvasclippingnode'], function(exports, cocos2d, ToolLayer, QLayer, NumberWheel, NumberPickerBox, BarsBox, MagnifiedBarsBox, DivisionTable, constants, CanvasClippingNode) {
+define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpickerbox', 'barsbox', 'magnifiedbarsbox', 'divisiontable', 'settingslayer', 'constants', 'canvasclippingnode'], function(exports, cocos2d, ToolLayer, QLayer, NumberWheel, NumberPickerBox, BarsBox, MagnifiedBarsBox, DivisionTable, SettingsLayer, constants, CanvasClippingNode) {
 	'use strict';
 
 	var Tool = ToolLayer.extend({
@@ -37,6 +38,8 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             background.setPosition(size.width/2, size.height/2);
             clc.addChild(background);
             this.addChild(clc,0);
+
+
 
             var title = new cc.Sprite();
             title.initWithFile(bl.resources['images_long_division_title_longdivision']);
@@ -89,12 +92,33 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.divisionTable.setupTable(this.numberPickerBox.digitValues());
             this.addChild(this.divisionTable);
 
-/*            this.testLabel = new cc.LabelTTF.create("HELLO", "mikadoBold", 24);
-            this.testLabel.setPosition(size.width/2, 200);
-            this.addChild(this.testLabel);
-*/
+            var settingsButtonBase = new cc.Sprite();
+            settingsButtonBase.initWithFile(bl.resources['images_long_division_settings_settings_button_base']);
+            settingsButtonBase.setPosition(settingsButtonBase.getContentSize().width/2, 700);
+            this.addChild(settingsButtonBase);
+
+            var settingsButtonFilename = bl.resources['images_long_division_settings_settings_button'];
+            var settingsButton = new cc.MenuItemImage.create(settingsButtonFilename, settingsButtonFilename, this.moveSettingsOn, this);
+            settingsButton.setPosition(70, 42);
+
+            var settingsButtonMenu = new cc.Menu.create(settingsButton);
+            settingsButtonMenu.setPosition(0,0);
+            settingsButtonBase.addChild(settingsButtonMenu);
+
+            var settingsPage = new SettingsLayer();
+            // settingsPage.setPosition(size.width/2, size.height/2);
+            settingsPage.setZOrder(100);
+            settingsPage.mainLayer = this;
+            this.addChild(settingsPage);
+            settingsPage.setTouchPriority(-200);
+
+
+            //settingsPage.removeFromParent();
+
             return this;
 		},
+
+        
 
         onTouchesBegan:function(touches, event) {
             var touchLocation = this.convertTouchToNodeSpace(touches[0]);
