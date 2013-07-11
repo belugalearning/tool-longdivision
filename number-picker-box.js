@@ -12,6 +12,8 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
 		ctor:function() {
 			this._super();
 
+			this.numberBoxes = [];
+
 			var container = new cc.Sprite();
             container.initWithFile(bl.resources['images_long_division_numberpickerbox']);
             this.addChild(container);

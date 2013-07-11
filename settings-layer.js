@@ -30,10 +30,22 @@ define(['numberwheel'], function(NumberWheel) {
 			this.divisorWheel.setPosition(375, 250);
 			background.addChild(this.divisorWheel);
 
-		},
+			var tableLabel = new cc.LabelTTF.create("Table:", "mikadoBold", 34);
+			tableLabel.setPosition(700, 400);
+			background.addChild(tableLabel);
 
-		onEnter:function() {
-			this._super();
+			this.tableButton = new cc.Sprite();
+			this.tableButton.initWithFile(bl.resources['images_clock_settings_digital_button_on']);
+            this.tableButton.setPosition(700, 350);
+            background.addChild(this.tableButton);
+
+            this.tableVisible = true;
+
+            this.closeButton = new cc.Sprite();
+            this.closeButton.initWithFile(bl.resources['images_long_division_settings_free_form_closebutton']);
+            this.closeButton.setPosition(960, 710);
+            background.addChild(this.closeButton);
+
 		},
 
 		registerWithTouchDispatcher:function() {
@@ -44,7 +56,26 @@ define(['numberwheel'], function(NumberWheel) {
 			var touchLocation = this.convertTouchToNodeSpace(touch);
 			this.dividendWheel.processTouch(touchLocation);
 			this.divisorWheel.processTouch(touchLocation);
+			if (this.tableButton.touched(touchLocation)) {
+				this.toggleTable();
+			};
+			if (this.closeButton.touched(touchLocation)) {
+				this.processCloseSettings();
+			};
 			return true;
+		},
+
+		toggleTable:function() {
+			this.tableVisible = !this.tableVisible;
+			var filename = this.tableVisible ? bl.resources['images_clock_settings_digital_button_on'] : bl.resources['images_clock_settings_digital_button_off'];
+			this.tableButton.setTextureWithFilename(filename);
+			this.mainLayer.setTableVisible(this.tableVisible);
+		},
+
+		processCloseSettings:function() {
+			var dividend = this.dividendWheel.value();
+			var divisor = this.divisorWheel.value();
+			this.mainLayer.setupWithNumbers(dividend, divisor);
 		},
 	});
 
@@ -77,13 +108,5 @@ define(['numberwheel'], function(NumberWheel) {
             tableLabel.setPosition(700, 400);
             settingsBackground.addChild(tableLabel);
 
-            var tableOn = new cc.MenuItemFont.create("On", this.tableOn, this);
-            tableOn.setPosition(700, 350);
-
-            var tableOff = new cc.MenuItemFont.create("Off", this.tableOff, this);
-            tableOff.setPosition(700, 300);
-
-            var tableMenu = new cc.Menu.create(tableOn, tableOff);
-            tableMenu.setPosition(0,0);
-            settingsBackground.addChild(tableMenu);
+            
         },*/

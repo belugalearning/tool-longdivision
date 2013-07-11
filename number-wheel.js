@@ -60,7 +60,7 @@ define(['constants', 'canvasclippingnode'], function(constants, CanvasClippingNo
 
 				var upButton = new cc.Sprite();
 				upButton.initWithFile(bl.resources['images_long_division_numberpicker_up_arrow']);
-				upButton.setPosition(xPosition, 120);
+				upButton.setPosition(xPosition, 110);
 				this.addChild(upButton);
 				upButton.isUp = true;
 				upButton.positionIndex = i;
@@ -68,7 +68,7 @@ define(['constants', 'canvasclippingnode'], function(constants, CanvasClippingNo
 
 				var downButton = new cc.Sprite();
 				downButton.initWithFile(bl.resources['images_long_division_numberpicker_down_arrow']);
-				downButton.setPosition(xPosition, -130);
+				downButton.setPosition(xPosition, -120);
 				this.addChild(downButton);
 				downButton.isUp = false;
 				downButton.positionIndex = i;

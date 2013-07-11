@@ -25,12 +25,11 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
 			this.setTouchEnabled(true);
 
-            var dividend = 22;
-            var divisor = 7;
-            var correctDigits = this.calculateCorrectDigits(dividend, divisor);
-
             this.size = cc.Director.getInstance().getWinSize();
             var size = this.size;
+
+            var dividend = 22;
+            var divisor = 7;
 
             var clc = cc.Layer.create();
             var background = new cc.Sprite();
@@ -39,58 +38,20 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             clc.addChild(background);
             this.addChild(clc,0);
 
-
-
             var title = new cc.Sprite();
             title.initWithFile(bl.resources['images_long_division_title_longdivision']);
             title.setPosition(size.width/2, 700);
             this.addChild(title);
 
-            var questionBox = new cc.Sprite();
-            questionBox.initWithFile(bl.resources['images_long_division_question_tray']);
-            questionBox.setPosition(size.width/2, 600);
-            this.addChild(questionBox);
+            this.questionBox = new cc.Sprite();
+            this.questionBox.initWithFile(bl.resources['images_long_division_question_tray']);
+            this.questionBox.setPosition(size.width/2, 600);
+            this.addChild(this.questionBox);
 
-            var questionLabel = new cc.LabelTTF.create(dividend + " divided by " + divisor, "mikadoBold", 30);
-            questionLabel.setPosition(questionBox.getAnchorPointInPoints());
-            questionBox.addChild(questionLabel);
+            this.setupWithNumbers(dividend, divisor);
+            this.clearEverything();
+            this.setupWithNumbers(15,3);
 
-            this.numberPickerBox = new NumberPickerBox();
-            this.numberPickerBox.layer = this;
-            this.numberPickerBox.setPosition(375, 335);
-            this.addChild(this.numberPickerBox);
-
-            var barsBoxNode = new cc.Node();
-            barsBoxNode.setPosition(size.width/2, 500);
-            this.addChild(barsBoxNode);
-
-            this.barsBox = new BarsBox(dividend, divisor);
-            this.barsBox.correctDigits = correctDigits;
-            this.barsBox.setPosition(0, -22);
-            barsBoxNode.addChild(this.barsBox);
-            var barsBoundingBox = this.barsBox.getBoundingBox();
-
-            var lowEdgeLabel = new cc.LabelTTF.create("0", "mikadoBold", 24);
-            var barsBoxLeftEdge = barsBoundingBox.origin.x;
-            lowEdgeLabel.setPosition(barsBoxLeftEdge, 28);
-            lowEdgeLabel.setZOrder(-1);
-            barsBoxNode.addChild(lowEdgeLabel);
-
-            var highEdgeLabel = new cc.LabelTTF.create(dividend, "mikadoBold", 24);
-            var barsBoxRightEdge = barsBoundingBox.origin.x + barsBoundingBox.size.width;
-            highEdgeLabel.setPosition(barsBoxRightEdge, 28);
-            highEdgeLabel.setZOrder(-1);
-            barsBoxNode.addChild(highEdgeLabel);
-
-            this.magnifiedBarsBox = new MagnifiedBarsBox(dividend, divisor);
-            this.magnifiedBarsBox.barsBox.correctDigits = correctDigits;
-            this.magnifiedBarsBox.setPosition(850, 325);
-            this.addChild(this.magnifiedBarsBox);
-
-            this.divisionTable = new DivisionTable(divisor);
-            this.divisionTable.setPosition(size.width/2, this.divisionTable.getContentSize().height/2);
-            this.divisionTable.setupTable(this.numberPickerBox.digitValues());
-            this.addChild(this.divisionTable);
 
             var settingsButtonBase = new cc.Sprite();
             settingsButtonBase.initWithFile(bl.resources['images_long_division_settings_settings_button_base']);
@@ -113,12 +74,63 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             settingsPage.setTouchPriority(-200);
 
 
-            //settingsPage.removeFromParent();
+            settingsPage.removeFromParent();
 
             return this;
 		},
 
-        
+        setupWithNumbers:function(dividend, divisor) {
+            var correctDigits = this.calculateCorrectDigits(dividend, divisor);
+
+            this.questionLabel = new cc.LabelTTF.create(dividend + " divided by " + divisor, "mikadoBold", 30);
+            this.questionLabel.setPosition(this.questionBox.getAnchorPointInPoints());
+            this.questionBox.addChild(this.questionLabel);
+
+            this.numberPickerBox = new NumberPickerBox();
+            this.numberPickerBox.layer = this;
+            this.numberPickerBox.setPosition(375, 335);
+            this.addChild(this.numberPickerBox);
+
+            this.barsBoxNode = new cc.Node();
+            this.barsBoxNode.setPosition(this.size.width/2, 500);
+            this.addChild(this.barsBoxNode);
+
+            this.barsBox = new BarsBox(dividend, divisor);
+            this.barsBox.correctDigits = correctDigits;
+            this.barsBox.setPosition(0, -22);
+            this.barsBoxNode.addChild(this.barsBox);
+            var barsBoundingBox = this.barsBox.getBoundingBox();
+
+            var lowEdgeLabel = new cc.LabelTTF.create("0", "mikadoBold", 24);
+            var barsBoxLeftEdge = barsBoundingBox.origin.x;
+            lowEdgeLabel.setPosition(barsBoxLeftEdge, 28);
+            lowEdgeLabel.setZOrder(-1);
+            this.barsBoxNode.addChild(lowEdgeLabel);
+
+            var highEdgeLabel = new cc.LabelTTF.create(dividend, "mikadoBold", 24);
+            var barsBoxRightEdge = barsBoundingBox.origin.x + barsBoundingBox.size.width;
+            highEdgeLabel.setPosition(barsBoxRightEdge, 28);
+            highEdgeLabel.setZOrder(-1);
+            this.barsBoxNode.addChild(highEdgeLabel);
+
+            this.magnifiedBarsBox = new MagnifiedBarsBox(dividend, divisor);
+            this.magnifiedBarsBox.barsBox.correctDigits = correctDigits;
+            this.magnifiedBarsBox.setPosition(850, 325);
+            this.addChild(this.magnifiedBarsBox);
+
+            this.divisionTable = new DivisionTable(divisor);
+            this.divisionTable.setPosition(this.size.width/2, this.divisionTable.getContentSize().height/2);
+            this.divisionTable.setupTable(this.numberPickerBox.digitValues());
+            this.addChild(this.divisionTable);
+        },
+
+        clearEverything:function() {
+            this.questionLabel.removeFromParent();
+            this.numberPickerBox.removeFromParent();
+            this.barsBoxNode.removeFromParent();
+            this.magnifiedBarsBox.removeFromParent();
+            this.divisionTable.removeFromParent();
+        },
 
         onTouchesBegan:function(touches, event) {
             var touchLocation = this.convertTouchToNodeSpace(touches[0]);
@@ -167,6 +179,10 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
                 };
             }
             return [nonRecurringDigits, recurringDigits];
+        },
+
+        setTableVisible:function(visible) {
+            this.divisionTable.setVisible(visible);
         },
 
 	});
