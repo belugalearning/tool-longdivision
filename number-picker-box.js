@@ -1,5 +1,7 @@
-define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNode) {
+define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, CanvasClippingNode, constants) {
 	'use strict';
+
+	var NumberPickerLabels = constants['NumberPickerLabels'];
 
 	var NumberPickerBox = cc.Node.extend({
 
@@ -77,6 +79,23 @@ define(['numberbox', 'canvasclippingnode'], function(NumberBox, CanvasClippingNo
 			this.wordLabelNode = this.setupNodeWithSuffixes(wordLabelKeySuffixes);
 			this.slideNode.addChild(this.wordLabelNode);
 			this.wordLabelNode.setVisible(false);
+		},
+
+		setLabelType:function(labelType) {
+			this.numberLabelNode.setVisible(false);
+			this.powerLabelNode.setVisible(false);
+			this.wordLabelNode.setVisible(false);
+			switch (labelType) {
+				case NumberPickerLabels.NUMBERS:
+					this.numberLabelNode.setVisible(true);
+					break;
+				case NumberPickerLabels.POWERS:
+					this.powerLabelNode.setVisible(true);
+					break;
+				case NumberPickerLabels.WORDS:
+					this.wordLabelNode.setVisible(true);
+					break;
+			}
 		},
 
 		setupNodeWithSuffixes:function(keySuffixes) {

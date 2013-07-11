@@ -28,8 +28,8 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.size = cc.Director.getInstance().getWinSize();
             var size = this.size;
 
-            var dividend = 22;
-            var divisor = 7;
+            this.dividend = 22;
+            this.divisor = 7;
 
             var clc = cc.Layer.create();
             var background = new cc.Sprite();
@@ -48,10 +48,17 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.questionBox.setPosition(size.width/2, 600);
             this.addChild(this.questionBox);
 
-            this.setupWithNumbers(dividend, divisor);
-            this.clearEverything();
-            this.setupWithNumbers(15,3);
+            this.tableNode = new cc.Node();
+            this.addChild(this.tableNode);
 
+            this.setupWithNumbers(this.dividend, this.divisor);
+
+            var clearButtonFilename = bl.resources['images_long_division_clear_button'];
+            var clearButton = new cc.MenuItemImage.create(clearButtonFilename, clearButtonFilename, this.reset, this);
+            clearButton.setPosition(205, 27);
+
+            var clearButtonMenu = new cc.Menu.create(clearButton);
+            this.addChild(clearButtonMenu);
 
             var settingsButtonBase = new cc.Sprite();
             settingsButtonBase.initWithFile(bl.resources['images_long_division_settings_settings_button_base']);
@@ -66,20 +73,28 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             settingsButtonMenu.setPosition(0,0);
             settingsButtonBase.addChild(settingsButtonMenu);
 
-            var settingsPage = new SettingsLayer();
-            // settingsPage.setPosition(size.width/2, size.height/2);
-            settingsPage.setZOrder(100);
-            settingsPage.mainLayer = this;
-            this.addChild(settingsPage);
-            settingsPage.setTouchPriority(-200);
+            this.settingsLayer = new SettingsLayer();
+            this.settingsLayer.setPosition(0, size.height * 3/2);
+            // this.settingsLayer.setPosition(0,0);
+            this.settingsLayer.setZOrder(100);
+            this.settingsLayer.mainLayer = this;
+            this.addChild(this.settingsLayer);
+            this.settingsLayer.setTouchPriority(-200);
+            this.settingsLayer.setNumbers(this.dividend, this.divisor);
+/*            var action = cc.MoveTo.create(0.3, cc.p(0,0));
+            this.settingsLayer.runAction(action);
+*/
 
+            // this.settingsLayer.removeFromParent();
 
-            settingsPage.removeFromParent();
 
             return this;
 		},
 
         setupWithNumbers:function(dividend, divisor) {
+            this.dividend = dividend;
+            this.divisor = divisor;
+
             var correctDigits = this.calculateCorrectDigits(dividend, divisor);
 
             this.questionLabel = new cc.LabelTTF.create(dividend + " divided by " + divisor, "mikadoBold", 30);
@@ -121,7 +136,16 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.divisionTable = new DivisionTable(divisor);
             this.divisionTable.setPosition(this.size.width/2, this.divisionTable.getContentSize().height/2);
             this.divisionTable.setupTable(this.numberPickerBox.digitValues());
-            this.addChild(this.divisionTable);
+            this.tableNode.addChild(this.divisionTable);
+        },
+
+        reset:function() {
+            this.resetWithNumbers(this.dividend, this.divisor);
+        },
+
+        resetWithNumbers:function(dividend, divisor) {
+            this.clearEverything();
+            this.setupWithNumbers(dividend, divisor);
         },
 
         clearEverything:function() {
@@ -182,7 +206,23 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
         },
 
         setTableVisible:function(visible) {
-            this.divisionTable.setVisible(visible);
+            this.tableNode.setVisible(visible);
+        },
+
+        moveSettingsOn:function() {
+            var moveOn = cc.MoveTo.create(0.3, cc.p(0,0));
+            this.settingsLayer.runAction(moveOn);
+            this.settingsLayer.active = true;
+        },
+
+        moveSettingsOff:function() {
+            var moveOff = cc.MoveTo.create(0.3, cc.p(0, this.size.height));
+            this.settingsLayer.runAction(moveOff);
+            this.settingsLayer.active = false;
+        },
+
+        setLabelType:function(type) {
+            this.numberPickerBox.setLabelType(type);
         },
 
 	});

@@ -80,19 +80,19 @@ define(['constants', 'canvasclippingnode'], function(constants, CanvasClippingNo
 			for (var i = 0; i < this.buttons.length; i++) {
 				var button = this.buttons[i];
 				if (button.touched(touchLocation)) {
-					this.sectionChangeForButton(button);
+					this.sectionChangeForButton(button, 0.3);
 				};
 			};
 		},
 
-		sectionChangeForButton:function(button) {
+		sectionChangeForButton:function(button, time) {
 			var positionIndex = button.positionIndex;
 			var digitNode = this.digitNodes[positionIndex];
 			if (!digitNode.actionInProgress) {
 				digitNode.actionInProgress = true;
 				var yPosition = button.isUp ? this.sectionHeight * 3/2 + 5 : -this.sectionHeight/2 + 5;
 				var positionToMoveTo = cc.p(this.sectionWidth/2, yPosition);
-				var moveAction = cc.MoveTo.create(0.3, positionToMoveTo);
+				var moveAction = cc.MoveTo.create(time, positionToMoveTo);
 				var resetDigitNode = cc.CallFunc.create(this.setDigitNodeToNormal, this, positionIndex);
 				var scrollAndReset = cc.Sequence.create(moveAction, resetDigitNode);
 				digitNode.numberWheelPositionIndex += button.isUp ? 1 : -1;
@@ -151,6 +151,32 @@ define(['constants', 'canvasclippingnode'], function(constants, CanvasClippingNo
 				value += this.digitNodes[digit].numberWheelPositionIndex * Math.pow(10, digitPowers[digit]);
 			};
 			return value;
+		},
+
+		setNumber:function(number) {
+			var numberString = number + "";
+			for (var i = 0; i < numberString.length; i++) {
+				var digitNode = this.digitNodes[this.digitNodes.length - 1 - i];
+				var digit = numberString[numberString.length - 1 - i];
+				digitNode.numberWheelPositionIndex = numberWheelPositions.indexOf(digit);
+				this.setDigitNodeToNormal(digitNode);
+			};
+		},
+
+		freakOut:function() {
+			this.freakOutsRemaining = 400;
+			this.oneRandom();
+		},
+
+		oneRandom:function() {
+			if (this.freakOutsRemaining > 0) {
+				var button = this.buttons[Math.floor(Math.random() * this.buttons.length)];
+				var time = Math.random() * 0.5;
+				this.sectionChangeForButton(button, time);
+				var that = this;
+				var timeOut = setTimeout(function() {that.oneRandom()}, 10);
+				this.freakOutsRemaining--;
+			};
 		},
 
 	});
