@@ -18,27 +18,32 @@ define([], function() {
 		},
 
 		setLength:function(length) {
-			var leftWidth = this.barLeft.getContentSize().width;
-			var leftMainWidth = 3;
-			var rightWidth = this.barRight.getContentSize().width;
-			var rightMainWidth = 4;
-			var lengthOfMiddle = length - leftMainWidth - rightMainWidth;
-			if (lengthOfMiddle < 0) {
-				this.barLeft.setVisible(false);
-				this.barRight.setVisible(false);
-				var scale = (length - 1)/(this.barMiddle.getContentSize().width);
-				this.barMiddle.setScaleX(scale);
-				this.barMiddle.setPosition(length/2 + 1, 0);
+			if (length > 1) {
+				this.setVisible(true);
+				var leftWidth = this.barLeft.getContentSize().width;
+				var leftMainWidth = 3;
+				var rightWidth = this.barRight.getContentSize().width;
+				var rightMainWidth = 4;
+				var lengthOfMiddle = length - leftMainWidth - rightMainWidth;
+				if (lengthOfMiddle < 0) {
+					this.barLeft.setVisible(false);
+					this.barRight.setVisible(false);
+					var scale = length/(this.barMiddle.getContentSize().width);
+					this.barMiddle.setScaleX(scale);
+					this.barMiddle.setPosition(length/2, 0);
+				} else {
+					this.barLeft.setVisible(true);
+					this.barRight.setVisible(true);
+					this.barLeft.setPosition(leftMainWidth - leftWidth/2, 0);
+
+					var scale = lengthOfMiddle/(this.barMiddle.getContentSize().width);
+					this.barMiddle.setScaleX(scale);
+					this.barMiddle.setPosition(leftMainWidth + lengthOfMiddle/2, 0);
+
+					this.barRight.setPosition(leftMainWidth + lengthOfMiddle + rightWidth/2, 0);
+				};
 			} else {
-				this.barLeft.setVisible(true);
-				this.barRight.setVisible(true);
-				this.barLeft.setPosition(leftMainWidth - leftWidth/2, 0);
-
-				var scale = lengthOfMiddle/(this.barMiddle.getContentSize().width);
-				this.barMiddle.setScaleX(scale);
-				this.barMiddle.setPosition(leftMainWidth + lengthOfMiddle/2, 0);
-
-				this.barRight.setPosition(leftMainWidth + lengthOfMiddle + rightWidth/2, 0);
+				this.setVisible(false);
 			};
 		},
 

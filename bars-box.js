@@ -26,7 +26,7 @@ define(['bar'], function(Bar) {
 		setBars:function(digitValues) {
 			var totalLength = 0;
 			var totalValue = 0;
-			var colours = [cc.c3b(102, 255, 255), cc.c3b(153, 255, 102), cc.c3b(255, 153, 51), cc.c3b(204, 102, 255), cc.c3b(255, 255, 102)];
+			var colors = [cc.c3b(102, 255, 255), cc.c3b(153, 255, 102), cc.c3b(255, 153, 51), cc.c3b(204, 102, 255), cc.c3b(255, 255, 102)];
 			this.barsNode.removeAllChildren();
 			this.toolTipNode.removeAllChildren();
 /*			for (var i = 0; i < this.bars.length; i++) {
@@ -43,7 +43,7 @@ define(['bar'], function(Bar) {
 				var digitKey = digitKeys[i];
 				for (var j = 0; j < digitValues[digitKey]; j++) {
 					var bar = new Bar();
-					bar.setColor(colours.indexWraparound(digitKey % 5));
+					bar.setColor(colors.indexWraparound(digitKey % colors.length));
 
 					var value = Math.pow(10, digitKey) * this.divisor;
 					var length = Math.pow(10, digitKey) * this.scaleFactor();
@@ -57,7 +57,7 @@ define(['bar'], function(Bar) {
 					
 					var toolTip = new cc.Sprite();
 					toolTip.initWithFile(window.bl.getResource('bar_tooltip'));
-					toolTip.setPosition(totalLength, 77);
+					toolTip.setPosition(totalLength - 1, 70);
 					var toolTipWidth = toolTip.getContentSize().width;
 					var totalValueRounded = Math.round(totalValue * 1000)/1000;
 					var toolTipLabel = new cc.LabelTTF.create(totalValueRounded, "mikadoBold", 16);

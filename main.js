@@ -32,8 +32,8 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.size = cc.Director.getInstance().getWinSize();
             var size = this.size;
 
-            this.dividend = 22;
-            this.divisor = 7;
+            this.dividend = 10;
+            this.divisor = 4;
 
             this.labelType = NumberPickerLabels.NUMBERS;
 

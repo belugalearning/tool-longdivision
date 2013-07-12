@@ -64,7 +64,7 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
 		},
 
 		setupLabelNodes:function() {
-			var numberLabelKeySuffixes = ['1000', '100', '10', '1', '1over10', '1over100', '1over1000'];
+			var numberLabelKeySuffixes = ['1000', '100', 'number10', '1', '1over10', '1over100', '1over1000'];
 			var powerLabelKeySuffixes = ['10+3', '10+2', '10+1', '1', '10_1', '10_2', '10_3'];
 			var wordLabelKeySuffixes = ['thousands', 'hundreds', 'tens', 'units', 'tenths', 'hundredths', 'thousandths'];
 
