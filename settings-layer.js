@@ -115,7 +115,7 @@ define(['numberwheel', 'constants'], function(NumberWheel, constants) {
 		},
 
 		freakOut:function() {
-			this.freakOutsRemaining = 100;
+			this.freakOutsRemaining = 75;
 			this.oneRandom();
 		},
 

@@ -164,7 +164,7 @@ define(['constants', 'canvasclippingnode'], function(constants, CanvasClippingNo
 		},
 
 		freakOut:function() {
-			this.freakOutsRemaining = 400;
+			this.freakOutsRemaining = 275;
 			this.oneRandom();
 		},
 
