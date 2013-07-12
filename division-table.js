@@ -31,6 +31,8 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			this.addChild(answerBox);
 			this.answerLabel = new cc.LabelTTF.create("", "mikadoBold", 34);
 			this.answerLabel.setPosition(answerBox.getAnchorPointInPoints());
+			var boxSize = answerBox.getBoundingBox().size;
+			this.answerLabel.boundary = cc.SizeMake(boxSize.width - 20, boxSize.height);
 			answerBox.addChild(this.answerLabel);
 
 		},
@@ -59,7 +61,7 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 				var rowCorrector = Math.min(this.numberOfRows, 3);
 				this.slideNode.setPosition(0, Math.min(50 * (this.numberOfRows - rowCorrector), currentYPosition));
 			};
-			this.answerLabel.setString(this.total);
+			this.answerLabel.setStringAutoFontSize(this.total, 100);
 		},
 
 		setupTableRow:function(digit, power) {
@@ -70,8 +72,11 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			var digitBox = new cc.Sprite();
 			digitBox.initWithFile(window.bl.getResource('table_box'));
 			rowNode.addChild(digitBox);
-			var digitLabel = new cc.LabelTTF.create(digit, "mikadoBold", "24");
+			var digitLabel = new cc.LabelTTF.create("", "mikadoBold", "100");
 			digitLabel.setPosition(digitBox.getAnchorPointInPoints());
+			var digitBoxSize = digitBox.getBoundingBox().size;
+			digitLabel.boundary = cc.SizeMake(digitBoxSize.width - 6, digitBoxSize.height);
+			digitLabel.setStringAutoFontSize(digit, 100);
 			digitBox.addChild(digitLabel);
 
 			var multiply = new cc.Sprite();
@@ -84,7 +89,10 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			unitBox.setPosition(150, 0);
 			rowNode.addChild(unitBox);
 			var unit = this.numberTimesPowerOfTenString(this.divisor, power);
-			var unitLabel = new cc.LabelTTF.create(unit, "mikadoBold", 24);
+			var unitLabel = new cc.LabelTTF.create("", "mikadoBold", 100);
+			var unitBoxSize = unitBox.getBoundingBox().size;
+			unitLabel.boundary = cc.SizeMake(unitBoxSize.width - 6, unitBoxSize.height);
+			unitLabel.setStringAutoFontSize(unit, 100);
 			unitLabel.setPosition(unitBox.getAnchorPointInPoints());
 			unitBox.addChild(unitLabel);
 
@@ -98,7 +106,10 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			resultBox.setPosition(300, 0);
 			rowNode.addChild(resultBox);
 			var result = this.numberTimesPowerOfTenString(this.divisor * digit, power);
-			var resultLabel = new cc.LabelTTF.create(result, "mikadoBold", 24);
+			var resultLabel = new cc.LabelTTF.create("", "mikadoBold", 100);
+			var resultBoxSize = resultBox.getBoundingBox().size;
+			resultLabel.boundary = cc.SizeMake(resultBoxSize.width - 6, resultBoxSize.height);
+			resultLabel.setStringAutoFontSize(result, 100);
 			resultLabel.setPosition(resultBox.getAnchorPointInPoints());
 			resultBox.addChild(resultLabel);
 			this.total = this.addNumberStrings(this.total, result);
