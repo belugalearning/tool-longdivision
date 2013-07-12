@@ -21,7 +21,7 @@ define(['canvasclippingnode', 'barsbox'], function(CanvasClippingNode, BarsBox) 
 			this.barsBox = new BarsBox(dividend / magnifyFactor, divisor);
 			this.barsBox.setPosition(-260, 100);
 			var dummyLeftEdge = (1 - magnifyFactor) * this.barsBox.getContentSize().width;
-			this.barsBox.barsNode.setPosition(dummyLeftEdge, -4);
+			this.barsBox.barsNode.setPosition(dummyLeftEdge, this.barsBox.getContentSize().height/2 - 4);
 			this.barsBox.toolTipNode.setPosition(dummyLeftEdge, 8);
 			clipperNode.addChild(this.barsBox);
 			// this.addChild(this.barsBox);
