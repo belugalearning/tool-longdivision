@@ -4,7 +4,7 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 	var DivisionTable = cc.Sprite.extend({
 		ctor:function(divisor) {
 			this._super();
-			this.initWithFile(bl.resources['images_long_division_table_sectionbox']);
+			this.initWithFile(window.bl.getResource('table_sectionbox'));
 			this.divisor = divisor;
 			this.scrolling = false;
 			this.numberOfRows = 0;
@@ -15,10 +15,10 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			this.addChild(clippingNode);
 			this.slideNode = new cc.Node();
 			clippingNode.addChild(this.slideNode);
-			var upButtonFilename = bl.resources['images_long_division_table_up_arrow'];
+			var upButtonFilename = window.bl.getResource('table_up_arrow');
 			var upButton = new cc.MenuItemImage.create(upButtonFilename, upButtonFilename, this.scrollDown, this);
 			upButton.setPosition(0, 55);
-			var downButtonFilename = bl.resources['images_long_division_table_down_arrow'];
+			var downButtonFilename = window.bl.getResource('table_down_arrow');
 			var downButton = new cc.MenuItemImage.create(downButtonFilename, downButtonFilename, this.scrollUp, this);
 			downButton.setPosition(0, -55);
 			var upDownMenu = new cc.Menu.create(upButton, downButton);
@@ -26,7 +26,7 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			this.addChild(upDownMenu);
 
 			var answerBox = new cc.Sprite();
-			answerBox.initWithFile(bl.resources['images_long_division_table_answerbox']);
+			answerBox.initWithFile(window.bl.getResource('table_answerbox'));
 			answerBox.setPosition(800, 100);
 			this.addChild(answerBox);
 			this.answerLabel = new cc.LabelTTF.create("", "mikadoBold", 34);
@@ -68,19 +68,19 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			this.slideNode.addChild(rowNode);
 
 			var digitBox = new cc.Sprite();
-			digitBox.initWithFile(bl.resources['images_long_division_table_box']);
+			digitBox.initWithFile(window.bl.getResource('table_box'));
 			rowNode.addChild(digitBox);
 			var digitLabel = new cc.LabelTTF.create(digit, "mikadoBold", "24");
 			digitLabel.setPosition(digitBox.getAnchorPointInPoints());
 			digitBox.addChild(digitLabel);
 
 			var multiply = new cc.Sprite();
-			multiply.initWithFile(bl.resources['images_long_division_table_x']);
+			multiply.initWithFile(window.bl.getResource('table_x'));
 			multiply.setPosition(75, 0);
 			rowNode.addChild(multiply);
 
 			var unitBox = new cc.Sprite();
-			unitBox.initWithFile(bl.resources['images_long_division_table_box'])
+			unitBox.initWithFile(window.bl.getResource('table_box'))
 			unitBox.setPosition(150, 0);
 			rowNode.addChild(unitBox);
 			var unit = this.numberTimesPowerOfTenString(this.divisor, power);
@@ -94,7 +94,7 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			rowNode.addChild(equals);
 
 			var resultBox = new cc.Sprite();
-			resultBox.initWithFile(bl.resources['images_long_division_table_box']);
+			resultBox.initWithFile(window.bl.getResource('table_box'));
 			resultBox.setPosition(300, 0);
 			rowNode.addChild(resultBox);
 			var result = this.numberTimesPowerOfTenString(this.divisor * digit, power);

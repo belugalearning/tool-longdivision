@@ -17,7 +17,7 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
 			this.numberBoxes = [];
 
 			var container = new cc.Sprite();
-            container.initWithFile(bl.resources['images_long_division_numberpickerbox']);
+            container.initWithFile(window.bl.getResource('numberpickerbox'));
             this.addChild(container);
 
             this.numberPickerClipper = new CanvasClippingNode();
@@ -35,7 +35,7 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
             this.firstBoxShownIndex = 0;
 
             var decimalPoint = new cc.Sprite();
-            decimalPoint.initWithFile(bl.resources['images_long_division_decimalpoint']);
+            decimalPoint.initWithFile(window.bl.getResource('decimalpoint'));
             decimalPoint.setPosition(290, 0);
             this.slideNode.addChild(decimalPoint);
 
@@ -51,12 +51,12 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
             leftRightMenu.setPosition(0,0);
             this.addChild(leftRightMenu);
 
-            var leftArrowFilename = bl.resources['images_long_division_numberpicker_left_arrow'];
+            var leftArrowFilename = window.bl.getResource('numberpicker_left_arrow');
             var leftButton = cc.MenuItemImage.create(leftArrowFilename, leftArrowFilename, this.scrollLeft, this);
             leftButton.setPosition(-325, 0);
             leftRightMenu.addChild(leftButton);
 
-            var rightArrowFilename = bl.resources['images_long_division_numberpicker_right_arrow']
+            var rightArrowFilename = window.bl.getResource('numberpicker_right_arrow')
             var rightButton = cc.MenuItemImage.create(rightArrowFilename, rightArrowFilename, this.scrollRight, this);
             rightButton.setPosition(327, 0);
             leftRightMenu.addChild(rightButton);
@@ -103,7 +103,7 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
 			labelNode.setPosition(0, 100);
 			for (var i = 0; i < keySuffixes.length; i++) {
 				var label = new cc.Sprite();
-				label.initWithFile(bl.resources['images_long_division_labels_label_' + keySuffixes[i]]);
+				label.initWithFile(bl.getResource('labels_label_' + keySuffixes[i]));
 				label.setPosition(this.numberBoxes[i].getPosition().x, 0);
 				labelNode.addChild(label);
 			};

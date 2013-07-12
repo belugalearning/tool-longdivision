@@ -11,7 +11,7 @@ define(['constants', 'canvasclippingnode'], function(constants, CanvasClippingNo
 		ctor:function(numberOfDigits) {
 			this._super();
 
-			var background = new cc.Sprite.create(bl.resources['images_number_wheel_nw_' + numberOfDigits + "_ov"]);
+			var background = new cc.Sprite.create(window.bl.getResource('number_wheel_nw_' + numberOfDigits + "_ov"));
 			this.addChild(background);
 
 			var offsets = [0, -40, -75, -115, -150, -192];
@@ -22,7 +22,7 @@ define(['constants', 'canvasclippingnode'], function(constants, CanvasClippingNo
 			for (var i = 0; i < numberOfDigits; i++) {
 				var xPosition = offsets[numberOfDigits - 1] + 77 * i;
 
-				var sectionBackground = new cc.Sprite.create(bl.resources['images_number_wheel_numberwheelsectionbackground']);
+				var sectionBackground = new cc.Sprite.create(window.bl.getResource('number_wheel_numberwheelsectionbackground'));
 				sectionBackground.setPosition(xPosition, 0);
 				sectionBackground.setZOrder(-1);
 				this.addChild(sectionBackground);
@@ -59,7 +59,7 @@ define(['constants', 'canvasclippingnode'], function(constants, CanvasClippingNo
 				this.digitNodes.push(digitNode);
 
 				var upButton = new cc.Sprite();
-				upButton.initWithFile(bl.resources['images_long_division_numberpicker_up_arrow']);
+				upButton.initWithFile(window.bl.getResource('numberpicker_up_arrow'));
 				upButton.setPosition(xPosition, 110);
 				this.addChild(upButton);
 				upButton.isUp = true;
@@ -67,7 +67,7 @@ define(['constants', 'canvasclippingnode'], function(constants, CanvasClippingNo
 				this.buttons.push(upButton); 
 
 				var downButton = new cc.Sprite();
-				downButton.initWithFile(bl.resources['images_long_division_numberpicker_down_arrow']);
+				downButton.initWithFile(window.bl.getResource('numberpicker_down_arrow'));
 				downButton.setPosition(xPosition, -120);
 				this.addChild(downButton);
 				downButton.isUp = false;

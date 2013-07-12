@@ -4,7 +4,7 @@ define(['canvasclippingnode', 'barsbox'], function(CanvasClippingNode, BarsBox) 
 	var MagnifiedBarsBox = cc.Sprite.extend({
 		ctor:function(dividend, divisor) {
 			this._super();
-			this.initWithFile(bl.resources['images_long_division_magnifyingglass']);
+			this.initWithFile(window.bl.getResource('magnifyingglass'));
 			var clipperNode = new CanvasClippingNode();
 			clipperNode.drawPathToClip = function() {
 				this.ctx.arc(112, -117, 90, 0, 2 * Math.PI, false);
@@ -13,7 +13,7 @@ define(['canvasclippingnode', 'barsbox'], function(CanvasClippingNode, BarsBox) 
 			clipperNode.setZOrder(-1);
 			this.addChild(clipperNode);
 			var testBox = new cc.Sprite();
-			// testBox.initWithFile(bl.resources['images_long_division_testbigwhitebox']);
+			// testBox.initWithFile(window.bl.getResource('testbigwhitebox'));
 			// clipperNode.addChild(testBox);
 
 			var magnifyFactor = 10;

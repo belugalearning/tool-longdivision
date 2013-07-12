@@ -5,7 +5,7 @@ define(['bar'], function(Bar) {
 
 		ctor:function(dividend, divisor) {
 			this._super();
-			this.initWithFile(bl.resources['images_long_division_barsbox']);
+			this.initWithFile(window.bl.getResource('barsbox'));
 			this.dividend = dividend;
 			this.divisor = divisor;
 			this.barsNode = new cc.Node();
@@ -55,7 +55,7 @@ define(['bar'], function(Bar) {
 					totalLength += length;
 					
 					var toolTip = new cc.Sprite();
-					toolTip.initWithFile(bl.resources['images_long_division_bar_tooltip']);
+					toolTip.initWithFile(window.bl.getResource('bar_tooltip'));
 					toolTip.setPosition(totalLength, 77);
 					var toolTipWidth = toolTip.getContentSize().width;
 					var totalValueRounded = Math.round(totalValue * 1000)/1000;

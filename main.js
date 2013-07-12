@@ -1,21 +1,23 @@
 require.config({
 	paths: {
         'toollayer': '../../tools/common/toollayer',
-        'numberwheel': '../../tools/long_division/number-wheel',
-        'constants': '../../tools/long_division/constants',
-        'canvasclippingnode': '../../tools/long_division/canvas-clipping-node',
-        'numberpickerbox': '../../tools/long_division/number-picker-box',
-        'numberbox': '../../tools/long_division/number-box',
-        'barsbox': '../../tools/long_division/bars-box',
-        'bar': '../../tools/long_division/bar',
-        'magnifiedbarsbox': '../../tools/long_division/magnified-bars-box',
-        'divisiontable': '../../tools/long_division/division-table',
-        'settingslayer': '../../tools/long_division/settings-layer',
+        'numberwheel': '../../tools/longdivision/number-wheel',
+        'constants': '../../tools/longdivision/constants',
+        'canvasclippingnode': '../../tools/longdivision/canvas-clipping-node',
+        'numberpickerbox': '../../tools/longdivision/number-picker-box',
+        'numberbox': '../../tools/longdivision/number-box',
+        'barsbox': '../../tools/longdivision/bars-box',
+        'bar': '../../tools/longdivision/bar',
+        'magnifiedbarsbox': '../../tools/longdivision/magnified-bars-box',
+        'divisiontable': '../../tools/longdivision/division-table',
+        'settingslayer': '../../tools/longdivision/settings-layer',
 	}
 });
 
 define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpickerbox', 'barsbox', 'magnifiedbarsbox', 'divisiontable', 'settingslayer', 'constants', 'canvasclippingnode'], function(exports, cocos2d, ToolLayer, QLayer, NumberWheel, NumberPickerBox, BarsBox, MagnifiedBarsBox, DivisionTable, SettingsLayer, constants, CanvasClippingNode) {
 	'use strict';
+
+    window.bl.toolTag = 'longdivision';
 
 	var Tool = ToolLayer.extend({
 
@@ -33,18 +35,18 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
             var clc = cc.Layer.create();
             var background = new cc.Sprite();
-            background.initWithFile(bl.resources['images_deep_water_background']);
+            background.initWithFile(window.bl.getResource('deep_water_background'));
             background.setPosition(size.width/2, size.height/2);
             clc.addChild(background);
             this.addChild(clc,0);
 
             var title = new cc.Sprite();
-            title.initWithFile(bl.resources['images_long_division_title_longdivision']);
+            title.initWithFile(window.bl.getResource('title_longdivision'));
             title.setPosition(size.width/2, 700);
             this.addChild(title);
 
             this.questionBox = new cc.Sprite();
-            this.questionBox.initWithFile(bl.resources['images_long_division_question_tray']);
+            this.questionBox.initWithFile(window.bl.getResource('question_tray'));
             this.questionBox.setPosition(size.width/2, 600);
             this.addChild(this.questionBox);
 
@@ -53,7 +55,7 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
             this.setupWithNumbers(this.dividend, this.divisor);
 
-            var clearButtonFilename = bl.resources['images_long_division_clear_button'];
+            var clearButtonFilename = window.bl.getResource('clear_button');
             var clearButton = new cc.MenuItemImage.create(clearButtonFilename, clearButtonFilename, this.reset, this);
             clearButton.setPosition(205, 27);
 
@@ -61,11 +63,11 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.addChild(clearButtonMenu);
 
             var settingsButtonBase = new cc.Sprite();
-            settingsButtonBase.initWithFile(bl.resources['images_long_division_settings_settings_button_base']);
+            settingsButtonBase.initWithFile(window.bl.getResource('settings_settings_button_base'));
             settingsButtonBase.setPosition(settingsButtonBase.getContentSize().width/2, 700);
             this.addChild(settingsButtonBase);
 
-            var settingsButtonFilename = bl.resources['images_long_division_settings_settings_button'];
+            var settingsButtonFilename = window.bl.getResource('settings_settings_button');
             var settingsButton = new cc.MenuItemImage.create(settingsButtonFilename, settingsButtonFilename, this.moveSettingsOn, this);
             settingsButton.setPosition(70, 42);
 

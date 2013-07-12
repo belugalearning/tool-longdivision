@@ -11,19 +11,19 @@ define([], function() {
 		ctor:function() {
 			this._super();
 			var numberContainer = new cc.Sprite();
-			numberContainer.initWithFile(bl.resources['images_long_division_numberbox']);
+			numberContainer.initWithFile(window.bl.getResource('numberbox'));
 			this.addChild(numberContainer);
 
 			this.upDownMenu = new cc.Menu.create();
 			this.upDownMenu.setPosition(0,0);
 			this.addChild(this.upDownMenu);
 
-			var upButtonFilename = bl.resources['images_long_division_numberpicker_up_arrow'];
+			var upButtonFilename = window.bl.getResource('numberpicker_up_arrow');
             var upButton = new cc.MenuItemImage.create(upButtonFilename, upButtonFilename, this.digitUp, this);
             upButton.setPosition(0, 50);
             this.upDownMenu.addChild(upButton);
 
-            var downButtonFilename = bl.resources['images_long_division_numberpicker_down_arrow'];
+            var downButtonFilename = window.bl.getResource('numberpicker_down_arrow');
             var downButton = new cc.MenuItemImage.create(downButtonFilename, downButtonFilename, this.digitDown, this);
             downButton.setPosition(0, -58);
             this.upDownMenu.addChild(downButton);

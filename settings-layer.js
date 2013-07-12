@@ -16,7 +16,7 @@ define(['numberwheel', 'constants'], function(NumberWheel, constants) {
 
 			var background = new cc.Sprite();
 			this.background = background;
-			background.initWithFile(bl.resources['images_long_division_settings_long_div_settings_bg']);
+			background.initWithFile(window.bl.getResource('settings_long_div_settings_bg'));
 			background.setPosition(size.width/2, size.height/2);
 			this.addChild(background);
 
@@ -37,7 +37,7 @@ define(['numberwheel', 'constants'], function(NumberWheel, constants) {
 			background.addChild(this.divisorWheel);
 
 			this.tableButton = new cc.Sprite();
-			this.tableButton.initWithFile(bl.resources['images_long_division_settings_table_on']);
+			this.tableButton.initWithFile(window.bl.getResource('settings_table_on'));
             this.tableButton.setPosition(size.width/2, 125);
             this.tableButton.processTouch = this.toggleTable;
             background.addChild(this.tableButton);
@@ -45,25 +45,25 @@ define(['numberwheel', 'constants'], function(NumberWheel, constants) {
             this.tableVisible = true;
 
             this.closeButton = new cc.Sprite();
-            this.closeButton.initWithFile(bl.resources['images_long_division_settings_free_form_closebutton']);
+            this.closeButton.initWithFile(window.bl.getResource('settings_free_form_closebutton'));
             this.closeButton.setPosition(960, 710);
             this.closeButton.processTouch = this.processCloseSettings;
             background.addChild(this.closeButton);
 
             this.wordsButton = new cc.Sprite();
-            this.wordsButton.initWithFile(bl.resources['images_long_division_settings_label_off']);
+            this.wordsButton.initWithFile(window.bl.getResource('settings_label_off'));
             this.wordsButton.setPosition(290, 225);
             this.wordsButton.processTouch = this.wordsVisible;
             background.addChild(this.wordsButton);
 
             this.powersButton = new cc.Sprite();
-            this.powersButton.initWithFile(bl.resources['images_long_division_settings_powers_off']);
+            this.powersButton.initWithFile(window.bl.getResource('settings_powers_off'));
             this.powersButton.setPosition(500, 225);
             this.powersButton.processTouch = this.powersVisible;
             background.addChild(this.powersButton);
 
             this.numbersButton = new cc.Sprite();
-            this.numbersButton.initWithFile(bl.resources['images_long_division_settings_numbers_on']);
+            this.numbersButton.initWithFile(window.bl.getResource('settings_numbers_on'));
             this.numbersButton.setPosition(710, 225);
             this.numbersButton.processTouch = this.numbersVisible;
             background.addChild(this.numbersButton);
@@ -92,7 +92,7 @@ define(['numberwheel', 'constants'], function(NumberWheel, constants) {
 
 		toggleTable:function() {
 			this.tableVisible = !this.tableVisible;
-			var filename = this.tableVisible ? bl.resources['images_long_division_settings_table_on'] : bl.resources['images_long_division_settings_table_off'];
+			var filename = this.tableVisible ? window.bl.getResource('settings_table_on') : window.bl.getResource('settings_table_off');
 			this.tableButton.setTextureWithFilename(filename);
 			this.mainLayer.setTableVisible(this.tableVisible);
 		},
@@ -158,18 +158,18 @@ define(['numberwheel', 'constants'], function(NumberWheel, constants) {
 
 		setLabelType:function(type) {
 			this.mainLayer.setLabelType(type);
-			this.wordsButton.setTextureWithFilename(bl.resources['images_long_division_settings_label_off']);
-			this.powersButton.setTextureWithFilename(bl.resources['images_long_division_settings_powers_off']);
-			this.numbersButton.setTextureWithFilename(bl.resources['images_long_division_settings_numbers_off']);
+			this.wordsButton.setTextureWithFilename(window.bl.getResource('settings_label_off'));
+			this.powersButton.setTextureWithFilename(window.bl.getResource('settings_powers_off'));
+			this.numbersButton.setTextureWithFilename(window.bl.getResource('settings_numbers_off'));
 			switch (type) {
 				case NumberPickerLabels.WORDS:
-					this.wordsButton.setTextureWithFilename(bl.resources['images_long_division_settings_label_on']);
+					this.wordsButton.setTextureWithFilename(window.bl.getResource('settings_label_on'));
 					break;
 				case NumberPickerLabels.POWERS:
-					this.powersButton.setTextureWithFilename(bl.resources['images_long_division_settings_powers_on']);
+					this.powersButton.setTextureWithFilename(window.bl.getResource('settings_powers_on'));
 					break;
 				case NumberPickerLabels.NUMBERS:
-					this.numbersButton.setTextureWithFilename(bl.resources['images_long_division_settings_numbers_on']);
+					this.numbersButton.setTextureWithFilename(window.bl.getResource('settings_numbers_on'));
 					break;
 			}
 		},
@@ -180,7 +180,7 @@ define(['numberwheel', 'constants'], function(NumberWheel, constants) {
 
 /*setupSettingsPage:function() {
             var settingsBackground = new cc.Sprite();
-            settingsBackground.initWithFile(bl.resources['images_long_division_settings_free_form_bg']);
+            settingsBackground.initWithFile(window.bl.getResource('settings_free_form_bg'));
             settingsBackground.setPosition(this.size.width/2, this.size.height/2);
             this.addChild(settingsBackground);
 
