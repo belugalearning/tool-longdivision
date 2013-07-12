@@ -19,6 +19,8 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
     window.bl.toolTag = 'longdivision';
 
+    var NumberPickerLabels = constants['NumberPickerLabels'];
+
 	var Tool = ToolLayer.extend({
 
 		init:function() {
@@ -32,6 +34,8 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
             this.dividend = 22;
             this.divisor = 7;
+
+            this.labelType = NumberPickerLabels.NUMBERS;
 
             var clc = cc.Layer.create();
             var background = new cc.Sprite();
@@ -107,6 +111,7 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.numberPickerBox.layer = this;
             this.numberPickerBox.setPosition(375, 335);
             this.addChild(this.numberPickerBox);
+            this.numberPickerBox.setLabelType(this.labelType);
 
             this.barsBoxNode = new cc.Node();
             this.barsBoxNode.setPosition(this.size.width/2, 500);
@@ -224,6 +229,7 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
         },
 
         setLabelType:function(type) {
+            this.labelType = type;
             this.numberPickerBox.setLabelType(type);
         },
 

@@ -89,7 +89,7 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			unitBox.addChild(unitLabel);
 
 			var equals = new cc.Sprite();
-			equals.initWithFile(bl.resources['images_long_division_table_=']);
+			equals.initWithFile(bl.getResource('table_='));
 			equals.setPosition(225, 0);
 			rowNode.addChild(equals);
 

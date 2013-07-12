@@ -70,7 +70,7 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
 
 			this.numberLabelNode = this.setupNodeWithSuffixes(numberLabelKeySuffixes);
 			this.slideNode.addChild(this.numberLabelNode);
-			// this.numberLabelNode.setVisible(false);
+			this.numberLabelNode.setVisible(false);
 
 			this.powerLabelNode = this.setupNodeWithSuffixes(powerLabelKeySuffixes);
 			this.slideNode.addChild(this.powerLabelNode);
