@@ -41,32 +41,46 @@ define(['bar'], function(Bar) {
 			var colourIndex = 0;
 			for (var i = 0; i < digitKeys.length; i++) {
 				var digitKey = digitKeys[i];
-				for (var j = 0; j < digitValues[digitKey]; j++) {
-					var bar = new Bar();
-					bar.setColor(colors.indexWraparound(digitKey % colors.length));
-
-					var value = Math.pow(10, digitKey) * this.divisor;
-					var length = Math.pow(10, digitKey) * this.scaleFactor();
-					bar.setLength(length);
-					// bar.setPosition(0,0);
-					bar.setPosition(totalLength, 0);
-					this.barsNode.addChild(bar);
-					this.bars.push(bar);
-					totalValue += value;
-					totalLength += length;
-					
-					var toolTip = new cc.Sprite();
-					toolTip.initWithFile(window.bl.getResource('bar_tooltip'));
-					toolTip.setPosition(totalLength - 1, 70);
-					var toolTipWidth = toolTip.getContentSize().width;
-					var totalValueRounded = Math.round(totalValue * 1000)/1000;
-					var toolTipLabel = new cc.LabelTTF.create(totalValueRounded, "mikadoBold", 16);
-					toolTipLabel.setColor(cc.c3b(0,0,0));
-					toolTipLabel.setPosition(32, 30);
-					if (length > toolTipWidth) {
-						this.toolTipNode.addChild(toolTip);
-						toolTip.addChild(toolTipLabel);
-						this.toolTips.push(toolTip);
+				var digit = digitValues[digitKey];
+				var value = Math.pow(10, digitKey) * this.divisor;
+				var length = Math.pow(10, digitKey) * this.scaleFactor();
+				var dummyBar = new Bar();
+				if (!dummyBar.isShort(length)) {
+					for (var j = 0; j < digit; j++) {
+						var bar = new Bar();
+						bar.setColor(colors.indexWraparound(digitKey % colors.length));
+						bar.setLength(length);
+						// bar.setPosition(0,0);
+						bar.setPosition(totalLength, 0);
+						this.barsNode.addChild(bar);
+						this.bars.push(bar);
+						totalValue += value;
+						totalLength += length;
+						
+						var toolTip = new cc.Sprite();
+						toolTip.initWithFile(window.bl.getResource('bar_tooltip'));
+						toolTip.setPosition(totalLength - 2, 70);
+						var toolTipWidth = toolTip.getContentSize().width;
+						var totalValueRounded = Math.round(totalValue * 1000)/1000;
+						var toolTipLabel = new cc.LabelTTF.create(totalValueRounded, "mikadoBold", 14);
+						toolTipLabel.setColor(cc.c3b(0,0,0));
+						toolTipLabel.setPosition(32, 28);
+						if (length > toolTipWidth) {
+							this.toolTipNode.addChild(toolTip);
+							toolTip.addChild(toolTipLabel);
+							this.toolTips.push(toolTip);
+						};
+					};
+				} else {
+					if (digit > 0) {
+						var bar = new Bar();
+						bar.setColor(colors.indexWraparound(digitKey % colors.length));
+						bar.setLength(length * digit, false);
+						bar.setPosition(totalLength, 0);
+						this.barsNode.addChild(bar);
+						this.bars.push(bar);
+						totalValue += value * digit;
+						totalLength += length * digit;
 					};
 				};
 				colourIndex++;

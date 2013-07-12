@@ -15,17 +15,21 @@ define([], function() {
 			this.barRight = new cc.Sprite();
 			this.barRight.initWithFile(window.bl.getResource('bar_slither_white_right'));
 			this.addChild(this.barRight);
+
+			this.leftMainWidth = 3;
+			this.rightMainWidth = 4;
 		},
 
-		setLength:function(length) {
+		setLength:function(length, rounded) {
+			if (rounded !== false) {
+				rounded = true;
+			};
 			if (length > 1) {
 				this.setVisible(true);
 				var leftWidth = this.barLeft.getContentSize().width;
-				var leftMainWidth = 3;
 				var rightWidth = this.barRight.getContentSize().width;
-				var rightMainWidth = 4;
-				var lengthOfMiddle = length - leftMainWidth - rightMainWidth;
-				if (lengthOfMiddle < 0) {
+				var lengthOfMiddle = length - this.leftMainWidth - this.rightMainWidth;
+				if (lengthOfMiddle < 0 || !rounded) {
 					this.barLeft.setVisible(false);
 					this.barRight.setVisible(false);
 					var scale = length/(this.barMiddle.getContentSize().width);
@@ -34,17 +38,21 @@ define([], function() {
 				} else {
 					this.barLeft.setVisible(true);
 					this.barRight.setVisible(true);
-					this.barLeft.setPosition(leftMainWidth - leftWidth/2, 0);
+					this.barLeft.setPosition(this.leftMainWidth - leftWidth/2, 0);
 
 					var scale = lengthOfMiddle/(this.barMiddle.getContentSize().width);
 					this.barMiddle.setScaleX(scale);
-					this.barMiddle.setPosition(leftMainWidth + lengthOfMiddle/2, 0);
+					this.barMiddle.setPosition(this.leftMainWidth + lengthOfMiddle/2, 0);
 
-					this.barRight.setPosition(leftMainWidth + lengthOfMiddle + rightWidth/2, 0);
+					this.barRight.setPosition(this.leftMainWidth + lengthOfMiddle + rightWidth/2, 0);
 				};
 			} else {
 				this.setVisible(false);
 			};
+		},
+
+		isShort:function(length) {
+			return length - this.leftMainWidth - this.rightMainWidth < 0;
 		},
 
 		setColor:function(color) {
