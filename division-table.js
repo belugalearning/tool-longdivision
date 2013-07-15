@@ -7,7 +7,7 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			this.initWithFile(window.bl.getResource('table_sectionbox'));
 			this.divisor = divisor;
 			this.scrolling = false;
-			this.numberOfRows = 0;
+			this.rows = [];
 			var clippingNode = new CanvasClippingNode();
 			clippingNode.drawPathToClip = function() {
 				this.ctx.rect(0, -203, 600, 203);
@@ -15,6 +15,7 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			this.addChild(clippingNode);
 			this.slideNode = new cc.Node();
 			clippingNode.addChild(this.slideNode);
+			// this.addChild(this.slideNode);
 			var upButtonFilename = window.bl.getResource('table_up_arrow');
 			var upButton = new cc.MenuItemImage.create(upButtonFilename, upButtonFilename, this.scrollDown, this);
 			upButton.setPosition(0, 55);
@@ -47,8 +48,8 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			this.yPosition = 165;
 			var power = 3;
 			this.total = "0";
-			var previousNumberOfRows = this.numberOfRows;
-			this.numberOfRows = 0;
+			var previousNumberOfRows = this.rows.length;
+			this.rows = [];
 			while (digitValues[power] !== undefined) {
 				var digit = digitValues[power];
 				if (digit !== 0) {
@@ -56,11 +57,13 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 				};
 				power--;
 			};
-			if (this.numberOfRows < previousNumberOfRows) {
+			var numberOfRows = this.rows.length;
+			if (numberOfRows < previousNumberOfRows) {
 				var currentYPosition = this.slideNode.getPosition().y;
-				var rowCorrector = Math.min(this.numberOfRows, 3);
-				this.slideNode.setPosition(0, Math.min(50 * (this.numberOfRows - rowCorrector), currentYPosition));
+				var rowCorrector = Math.min(numberOfRows, 3);
+				this.slideNode.setPosition(0, Math.min(50 * (numberOfRows - rowCorrector), currentYPosition));
 			};
+			this.setVisibleRows();
 			this.answerLabel.setStringAutoFontSize(this.total, 100);
 		},
 
@@ -115,11 +118,11 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			this.total = this.addNumberStrings(this.total, result);
 
 			this.yPosition -= 50;
-			this.numberOfRows++;
+			this.rows.push(rowNode);
 		},
 
 		scrollUp:function() {
-			if (this.slideNode.getPosition().y < 50 * (this.numberOfRows - 3)) {
+			if (this.slideNode.getPosition().y < 50 * (this.rows.length - 3)) {
 				this.scroll(true);
 			};
 		},
@@ -138,6 +141,20 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 				var setScrollingFalse = cc.CallFunc.create(function() {this.scrolling = false}, this);
 				var moveAndSet = cc.Sequence.create(moveAction, setScrollingFalse);
 				this.slideNode.runAction(moveAndSet);
+				this.setVisibleRows();
+			};
+		},
+
+		setVisibleRows:function() {
+			var slideNodeY = this.slideNode.getPosition().y;
+			for (var i = 0; i < this.rows.length; i++) {
+				var row = this.rows[i];
+				var rowHeight = slideNodeY + row.getPosition().y;
+				if (rowHeight > -100 && rowHeight < 300) {
+					row.setVisible(true);
+				} else {
+					row.setVisible(false);
+				};
 			};
 		},
 
