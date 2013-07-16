@@ -22,9 +22,10 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			var downButtonFilename = window.bl.getResource('table_down_arrow');
 			var downButton = new cc.MenuItemImage.create(downButtonFilename, downButtonFilename, this.scrollUp, this);
 			downButton.setPosition(0, -55);
-			var upDownMenu = new cc.Menu.create(upButton, downButton);
-			upDownMenu.setPosition(525, 90);
-			this.addChild(upDownMenu);
+			this.upDownMenu = new cc.Menu.create(upButton, downButton);
+			this.upDownMenu.setPosition(525, 90);
+			this.addChild(this.upDownMenu);
+			this.upDownMenu.setVisible(false);
 
 			var answerBox = new cc.Sprite();
 			answerBox.initWithFile(window.bl.getResource('table_answerbox'));
@@ -62,6 +63,11 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 				var currentYPosition = this.slideNode.getPosition().y;
 				var rowCorrector = Math.min(numberOfRows, 3);
 				this.slideNode.setPosition(0, Math.min(50 * (numberOfRows - rowCorrector), currentYPosition));
+			};
+			if (numberOfRows < 4) {
+				this.upDownMenu.setVisible(false);
+			} else {
+				this.upDownMenu.setVisible(true);
 			};
 			this.setVisibleRows();
 			this.answerLabel.setStringAutoFontSize(this.total, 100);
