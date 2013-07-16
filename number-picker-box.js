@@ -47,19 +47,25 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
 
 			this.setupLabelNodes();
 
-            var leftRightMenu = new cc.Menu.create();
+/*            var leftRightMenu = new ActivateOnTouchMenu.create();
             leftRightMenu.setPosition(0,0);
             this.addChild(leftRightMenu);
+*/
+            // var leftArrowFilename = window.bl.getResource('numberpicker_left_arrow');
+            // this.leftButton = cc.MenuItemImage.create(leftArrowFilename, leftArrowFilename, this.scrollLeft, this);
+            this.leftButton = new cc.Sprite();
+            this.leftButton.initWithFile(window.bl.getResource('numberpicker_left_arrow'));
+            this.leftButton.setPosition(-325, 0);
+            this.addChild(this.leftButton);
+            this.leftTouch = false;
 
-            var leftArrowFilename = window.bl.getResource('numberpicker_left_arrow');
-            var leftButton = cc.MenuItemImage.create(leftArrowFilename, leftArrowFilename, this.scrollLeft, this);
-            leftButton.setPosition(-325, 0);
-            leftRightMenu.addChild(leftButton);
-
-            var rightArrowFilename = window.bl.getResource('numberpicker_right_arrow')
-            var rightButton = cc.MenuItemImage.create(rightArrowFilename, rightArrowFilename, this.scrollRight, this);
-            rightButton.setPosition(327, 0);
-            leftRightMenu.addChild(rightButton);
+            // var rightArrowFilename = window.bl.getResource('numberpicker_right_arrow')
+            // var rightButton = cc.MenuItemImage.create(rightArrowFilename, rightArrowFilename, this.scrollRight, this);
+            this.rightButton = new cc.Sprite();
+            this.rightButton.initWithFile(window.bl.getResource('numberpicker_right_arrow'));
+            this.rightButton.setPosition(327, 0);
+            this.addChild(this.rightButton);
+            this.rightTouch = false;
 
 		},
 
@@ -124,6 +130,21 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
 			numberBox.boxEnabled(false);
 		},
 
+		processTouch:function(touchLocation) {
+			if (this.leftButton.touched(touchLocation)) {
+				this.scrollLeft();
+				this.leftTouch = true;
+			} else if (this.rightButton.touched(touchLocation)) {
+				this.scrollRight();
+				this.rightTouch = true;
+			};
+		},
+
+		processEnd:function() {
+			this.leftTouch = false;
+			this.rightTouch = false;
+		},
+
 		scrollLeft:function() {
 			if (!this.scrolling) {
 				if (this.firstBoxShownIndex !== 0) {
@@ -153,7 +174,8 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
 			var setScrollingFalse = cc.CallFunc.create(function() {this.scrolling = false}, this);
 			this.setVisibleBoxesBeforeSlide();
 			var setVisibleBoxes = cc.CallFunc.create(this.setVisibleBoxesAfterSlide, this);
-			var scrollAndSet = cc.Sequence.create(scroll, setScrollingFalse, setVisibleBoxes);
+			var repeatCall = cc.CallFunc.create(this.repeatCall, this);
+			var scrollAndSet = cc.Sequence.create(scroll, setScrollingFalse, setVisibleBoxes, repeatCall);
 			this.slideNode.runAction(scrollAndSet);
 		},
 
@@ -180,6 +202,14 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
 				} else {
 					this.numberBoxes[i].boxEnabled(false);
 				};
+			};
+		},
+
+		repeatCall:function() {
+			if (this.leftTouch) {
+				this.scrollLeft();
+			} else if (this.rightTouch) {
+				this.scrollRight();
 			};
 		},
 

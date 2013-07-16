@@ -165,7 +165,12 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
         onTouchesBegan:function(touches, event) {
             var touchLocation = this.convertTouchToNodeSpace(touches[0]);
+            this.numberPickerBox.processTouch(touchLocation);
             //this.testLabel.setString(JSON.stringify(this.numberPickerBox.valueString()));
+        },
+
+        onTouchesEnded:function(touches, event) {
+            this.numberPickerBox.processEnd();
         },
 
         processDigitChange:function() {
