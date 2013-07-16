@@ -59,13 +59,6 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
             this.setupWithNumbers(this.dividend, this.divisor);
 
-            var clearButtonFilename = window.bl.getResource('clear_button');
-            var clearButton = new cc.MenuItemImage.create(clearButtonFilename, clearButtonFilename, this.reset, this);
-            clearButton.setPosition(205, 27);
-
-            var clearButtonMenu = new cc.Menu.create(clearButton);
-            this.addChild(clearButtonMenu);
-
             var settingsButtonBase = new cc.Sprite();
             settingsButtonBase.initWithFile(window.bl.getResource('settings_settings_button_base'));
             settingsButtonBase.setPosition(settingsButtonBase.getContentSize().width/2, 700);
@@ -107,37 +100,47 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.questionLabel.setPosition(this.questionBox.getAnchorPointInPoints());
             this.questionBox.addChild(this.questionLabel);
 
+            this.numberPickerBoxNode = new cc.Node();
+            this.numberPickerBoxNode.setPosition(375, 440);
+            this.addChild(this.numberPickerBoxNode);
+
             this.numberPickerBox = new NumberPickerBox();
             this.numberPickerBox.layer = this;
-            this.numberPickerBox.setPosition(375, 335);
-            this.addChild(this.numberPickerBox);
+            this.numberPickerBoxNode.addChild(this.numberPickerBox);
             this.numberPickerBox.setLabelType(this.labelType);
 
             this.barsBoxNode = new cc.Node();
-            this.barsBoxNode.setPosition(this.size.width/2, 510);
+            this.barsBoxNode.setPosition(this.size.width/2, 260);
             this.addChild(this.barsBoxNode);
 
             this.barsBox = new BarsBox(dividend, divisor);
             this.barsBox.correctDigits = correctDigits;
-            this.barsBox.setPosition(0, -22);
             this.barsBoxNode.addChild(this.barsBox);
             var barsBoundingBox = this.barsBox.getBoundingBox();
 
+            var clearButtonFilename = window.bl.getResource('clear_button');
+            var clearButton = new cc.MenuItemImage.create(clearButtonFilename, clearButtonFilename, this.reset, this);
+            clearButton.setPosition(345, 75);
+
+            var clearButtonMenu = new cc.Menu.create(clearButton);
+            clearButtonMenu.setPosition(0,0);
+            this.numberPickerBoxNode.addChild(clearButtonMenu);
+
             var lowEdgeLabel = new cc.LabelTTF.create("0", "mikadoBold", 24);
             var barsBoxLeftEdge = barsBoundingBox.origin.x;
-            lowEdgeLabel.setPosition(barsBoxLeftEdge, 28);
+            lowEdgeLabel.setPosition(barsBoxLeftEdge, 50);
             lowEdgeLabel.setZOrder(-1);
             this.barsBoxNode.addChild(lowEdgeLabel);
 
             var highEdgeLabel = new cc.LabelTTF.create(dividend, "mikadoBold", 24);
             var barsBoxRightEdge = barsBoundingBox.origin.x + barsBoundingBox.size.width;
-            highEdgeLabel.setPosition(barsBoxRightEdge, 28);
+            highEdgeLabel.setPosition(barsBoxRightEdge, 50);
             highEdgeLabel.setZOrder(-1);
             this.barsBoxNode.addChild(highEdgeLabel);
 
             this.magnifiedBarsBox = new MagnifiedBarsBox(dividend, divisor);
             this.magnifiedBarsBox.barsBox.correctDigits = correctDigits;
-            this.magnifiedBarsBox.setPosition(850, 325);
+            this.magnifiedBarsBox.setPosition(850, 430);
             this.addChild(this.magnifiedBarsBox);
 
             this.divisionTable = new DivisionTable(divisor);
@@ -161,6 +164,7 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.barsBoxNode.removeFromParent();
             this.magnifiedBarsBox.removeFromParent();
             this.divisionTable.removeFromParent();
+            this.numberPickerBoxNode.removeFromParent();
         },
 
         onTouchesBegan:function(touches, event) {
