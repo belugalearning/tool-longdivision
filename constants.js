@@ -9,6 +9,14 @@ define([], function() {
     		NUMBERS:"numbers",
     		POWERS:"powers",
     		WORDS:"words",
-    	}
+    	},
+
+        'colors':[cc.c3b(102, 255, 255), //blue
+                  cc.c3b(255, 132, 153), //pink
+                  cc.c3b(153, 255, 102), //green
+                  cc.c3b(255, 153, 51), //orange
+                  cc.c3b(204, 153, 255), //purple
+                  cc.c3b(255, 255, 102), //yellow
+                  ], 
     };
 })

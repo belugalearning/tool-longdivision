@@ -1,4 +1,4 @@
-define(['canvasclippingnode'], function(CanvasClippingNode) {
+define(['canvasclippingnode', 'constants'], function(CanvasClippingNode, constants) {
 	'use strict';
 
 	var DivisionTable = cc.Sprite.extend({
@@ -78,10 +78,13 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			rowNode.setPosition(100,this.yPosition);
 			this.slideNode.addChild(rowNode);
 
+			var color = constants['colors'].indexWraparound(power);
+
 			var digitBox = new cc.Sprite();
 			digitBox.initWithFile(window.bl.getResource('table_box'));
 			rowNode.addChild(digitBox);
 			var digitLabel = new cc.LabelTTF.create("", "mikadoBold", "100");
+			digitLabel.setColor(color);
 			digitLabel.setPosition(digitBox.getAnchorPointInPoints());
 			var digitBoxSize = digitBox.getBoundingBox().size;
 			digitLabel.boundary = cc.SizeMake(digitBoxSize.width - 6, digitBoxSize.height);
@@ -99,6 +102,7 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			rowNode.addChild(unitBox);
 			var unit = this.numberTimesPowerOfTenString(this.divisor, power);
 			var unitLabel = new cc.LabelTTF.create("", "mikadoBold", 100);
+			unitLabel.setColor(color);
 			var unitBoxSize = unitBox.getBoundingBox().size;
 			unitLabel.boundary = cc.SizeMake(unitBoxSize.width - 6, unitBoxSize.height);
 			unitLabel.setStringAutoFontSize(unit, 100);
@@ -116,6 +120,7 @@ define(['canvasclippingnode'], function(CanvasClippingNode) {
 			rowNode.addChild(resultBox);
 			var result = this.numberTimesPowerOfTenString(this.divisor * digit, power);
 			var resultLabel = new cc.LabelTTF.create("", "mikadoBold", 100);
+			resultLabel.setColor(color);
 			var resultBoxSize = resultBox.getBoundingBox().size;
 			resultLabel.boundary = cc.SizeMake(resultBoxSize.width - 6, resultBoxSize.height);
 			resultLabel.setStringAutoFontSize(result, 100);

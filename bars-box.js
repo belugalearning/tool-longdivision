@@ -1,4 +1,4 @@
-define(['bar'], function(Bar) {
+define(['bar', 'constants'], function(Bar, constants) {
 	'use strict';
 
 	var BarsBox = cc.Sprite.extend({
@@ -26,13 +26,13 @@ define(['bar'], function(Bar) {
 		setBars:function(digitValues) {
 			var totalLength = 0;
 			var totalValue = 0;
-			var colors = [cc.c3b(102, 255, 255), cc.c3b(153, 255, 102), cc.c3b(255, 153, 51), cc.c3b(204, 102, 255), cc.c3b(255, 255, 102)];
 			this.barsNode.removeAllChildren();
 			this.toolTipNode.removeAllChildren();
 /*			for (var i = 0; i < this.bars.length; i++) {
 				this.bars[i].removeFromParent();
 			};
 */			this.bars = [];
+			var colors = constants['colors'];
 			var digitKeys = [];
 			for (var digitKey in digitValues) {
 				digitKeys.push(digitKey);
@@ -48,7 +48,7 @@ define(['bar'], function(Bar) {
 				if (!dummyBar.isShort(length)) {
 					for (var j = 0; j < digit; j++) {
 						var bar = new Bar();
-						bar.setColor(colors.indexWraparound(digitKey % colors.length));
+						bar.setColor(colors.indexWraparound(digitKey));
 						bar.setLength(length);
 						// bar.setPosition(0,0);
 						bar.setPosition(totalLength, 0);

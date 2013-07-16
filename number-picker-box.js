@@ -10,6 +10,7 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
 		firstBoxShownIndex:null,
 		scrolling:false,
 		layer:null,
+		insignificantGrey:cc.c3b(150, 150, 150),
 
 		ctor:function() {
 			this._super();
@@ -120,6 +121,7 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
 			this.numberBoxes[boxIndex] = numberBox;
 			numberBox.boxVisible(false);
 			numberBox.boxEnabled(false);
+			numberBox.setDigitColor(this.insignificantGrey);
 		},
 
 		processTouch:function(touchLocation) {
@@ -245,6 +247,45 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
 
 		processDigitChange:function() {
 			this.layer.processDigitChange();
+			this.setBoxColors();
+		},
+
+		setBoxColors:function() {
+			var firstSignificantIndex = 4;
+			for (var i = 0; i < 4; i++) {
+				var box = this.numberBoxes[i];
+				if (box.digit === 0) {
+					box.setDigitColor(this.insignificantGrey);
+				} else {
+					firstSignificantIndex = i;
+					break;
+				}
+			};
+		
+			var lastSignificantIndex = 3;
+			for (var i = this.numberBoxes.length - 1; i >= 4; i--) {
+				var box = this.numberBoxes[i];
+				if (box.digit === 0) {
+					box.setDigitColor(this.insignificantGrey);
+				} else {
+					lastSignificantIndex = i;
+					break;
+				};
+			};
+			for (var i = firstSignificantIndex; i <= lastSignificantIndex; i++) {
+				var box = this.numberBoxes[i];
+				if (box.digit === 0) {
+					box.setDigitColor(cc.c3b(255, 255, 255));
+				} else {
+					box.setDigitColor(constants['colors'].indexWraparound(box.power));
+				};
+			};
+			if (firstSignificantIndex <= lastSignificantIndex) {
+				var unitBox = this.numberBoxes[3];
+				var color = unitBox.digit === 0 ? cc.c3b(255, 255, 255) : constants['colors'].indexWraparound(0);
+				unitBox.setDigitColor(color);
+			};
+
 		},
 	});
 

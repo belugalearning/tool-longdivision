@@ -56,6 +56,10 @@ define([], function() {
 		boxEnabled:function(enabled) {
 			this.upDownMenu.setEnabled(enabled);
 		},
+
+		setDigitColor:function(color) {
+			this.digitLabel.setColor(color);
+		},
 	});
 
 	return NumberBox;

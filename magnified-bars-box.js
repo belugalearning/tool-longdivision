@@ -14,11 +14,12 @@ define(['canvasclippingnode', 'barsbox'], function(CanvasClippingNode, BarsBox) 
 			this.addChild(clipperNode);
 			var testBox = new cc.Sprite();
 			// testBox.initWithFile(window.bl.getResource('testbigwhitebox'));
-			// clipperNode.addChild(testBox);
+			clipperNode.addChild(testBox);
 
 			var magnifyFactor = 10;
 
 			this.barsBox = new BarsBox(dividend / magnifyFactor, divisor);
+			// this.barsBox.setScaleY(1.5);
 			this.barsBox.setPosition(-260, 100);
 			var dummyLeftEdge = (1 - magnifyFactor) * this.barsBox.getContentSize().width;
 			this.barsBox.barsNode.setPosition(dummyLeftEdge, this.barsBox.getContentSize().height/2 - 4);
