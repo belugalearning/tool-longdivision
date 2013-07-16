@@ -114,7 +114,7 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.numberPickerBox.setLabelType(this.labelType);
 
             this.barsBoxNode = new cc.Node();
-            this.barsBoxNode.setPosition(this.size.width/2, 500);
+            this.barsBoxNode.setPosition(this.size.width/2, 510);
             this.addChild(this.barsBoxNode);
 
             this.barsBox = new BarsBox(dividend, divisor);

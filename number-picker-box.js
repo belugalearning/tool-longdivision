@@ -47,20 +47,12 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
 
 			this.setupLabelNodes();
 
-/*            var leftRightMenu = new ActivateOnTouchMenu.create();
-            leftRightMenu.setPosition(0,0);
-            this.addChild(leftRightMenu);
-*/
-            // var leftArrowFilename = window.bl.getResource('numberpicker_left_arrow');
-            // this.leftButton = cc.MenuItemImage.create(leftArrowFilename, leftArrowFilename, this.scrollLeft, this);
             this.leftButton = new cc.Sprite();
             this.leftButton.initWithFile(window.bl.getResource('numberpicker_left_arrow'));
             this.leftButton.setPosition(-325, 0);
             this.addChild(this.leftButton);
             this.leftTouch = false;
 
-            // var rightArrowFilename = window.bl.getResource('numberpicker_right_arrow')
-            // var rightButton = cc.MenuItemImage.create(rightArrowFilename, rightArrowFilename, this.scrollRight, this);
             this.rightButton = new cc.Sprite();
             this.rightButton.initWithFile(window.bl.getResource('numberpicker_right_arrow'));
             this.rightButton.setPosition(327, 0);
