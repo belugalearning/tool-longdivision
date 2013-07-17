@@ -38,51 +38,65 @@ define(['bar', 'tooltip', 'constants'], function(Bar, ToolTip, constants) {
 			};
 			digitKeys.sort(function(a,b){return b-a});
 			var colourIndex = 0;
-			for (var i = 0; i < digitKeys.length; i++) {
-				var digitKey = digitKeys[i];
-				var digit = digitValues[digitKey];
-				var value = Math.pow(10, digitKey) * this.divisor;
-				var length = Math.pow(10, digitKey) * this.scaleFactor();
-				var dummyBar = new Bar();
-				if (!dummyBar.isShort(length)) {
-					for (var j = 0; j < digit; j++) {
-						var bar = new Bar();
-						bar.setColor(colors.indexWraparound(digitKey));
-						bar.setLength(length);
-						// bar.setPosition(0,0);
-						bar.setPosition(totalLength, 0);
-						this.barsNode.addChild(bar);
-						this.bars.push(bar);
-						totalValue += value;
-						totalLength += length;
+			if (this.dividend === 0) {
+				for (var i = 0; i < digitKeys.length; i++) {
+					if (digitValues[digitKeys[i]] !== 0) {
+						var bigBar = new Bar();
+						bigBar.setColor(cc.c3b(255, 0, 0));
+						bigBar.setLength(10000);
+						bigBar.setPosition(0,0);
+						this.barsNode.addChild(bigBar);
+						this.bars.push(bigBar);
+						break;
+					}
+				};
+			} else {
+				for (var i = 0; i < digitKeys.length; i++) {
+					var digitKey = digitKeys[i];
+					var digit = digitValues[digitKey];
+					var value = Math.pow(10, digitKey) * this.divisor;
+					var length = Math.pow(10, digitKey) * this.scaleFactor();
+					var dummyBar = new Bar();
+					if (!dummyBar.isShort(length)) {
+						for (var j = 0; j < digit; j++) {
+							var bar = new Bar();
+							bar.setColor(colors.indexWraparound(digitKey));
+							bar.setLength(length);
+							// bar.setPosition(0,0);
+							bar.setPosition(totalLength, 0);
+							this.barsNode.addChild(bar);
+							this.bars.push(bar);
+							totalValue += value;
+							totalLength += length;
 
-						var toolTip = new ToolTip();
-						toolTip.setAutoFontSize(true);
-						toolTip.setPosition(totalLength - 2, 70);
-						var totalValueRounded = Math.round(totalValue * 10000)/10000;
-						toolTip.setLabelString(totalValueRounded);
-						if (length > toolTip.getContentSize().width) {
-							this.toolTipNode.addChild(toolTip);
+							var toolTip = new ToolTip();
+							toolTip.setAutoFontSize(true);
+							toolTip.setPosition(totalLength - 2, 70);
+							var totalValueRounded = Math.round(totalValue * 10000)/10000;
+							toolTip.setLabelString(totalValueRounded);
+							if (length > toolTip.getContentSize().width) {
+								this.toolTipNode.addChild(toolTip);
+							};
+						};
+					} else {
+						if (digit > 0) {
+							var bar = new Bar();
+							bar.setColor(colors.indexWraparound(digitKey % colors.length));
+							bar.setLength(length * digit, false);
+							bar.setPosition(totalLength, 0);
+							this.barsNode.addChild(bar);
+							this.bars.push(bar);
+							totalValue += value * digit;
+							totalLength += length * digit;
 						};
 					};
-				} else {
-					if (digit > 0) {
-						var bar = new Bar();
-						bar.setColor(colors.indexWraparound(digitKey % colors.length));
-						bar.setLength(length * digit, false);
-						bar.setPosition(totalLength, 0);
-						this.barsNode.addChild(bar);
-						this.bars.push(bar);
-						totalValue += value * digit;
-						totalLength += length * digit;
-					};
+					colourIndex++;
 				};
-				colourIndex++;
-			};
-			if (this.isTooBig(digitValues)) {
-				var overColour = cc.c3b(255,0,0);
-				for (var i = 0; i < this.bars.length; i++) {
-					this.bars[i].setColor(overColour);
+				if (this.isTooBig(digitValues)) {
+					var overColour = cc.c3b(255,0,0);
+					for (var i = 0; i < this.bars.length; i++) {
+						this.bars[i].setColor(overColour);
+					};
 				};
 			};
 		},
