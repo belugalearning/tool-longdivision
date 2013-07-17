@@ -125,7 +125,7 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
             var clearButtonMenu = new cc.Menu.create(clearButton);
             clearButtonMenu.setPosition(0,0);
-            this.numberPickerBoxNode.addChild(clearButtonMenu);
+            this.addChild(clearButtonMenu);
 
             var lowEdgeLabel = new cc.LabelTTF.create("0", "mikadoBold", 24);
             var barsBoxLeftEdge = barsBoundingBox.origin.x;
@@ -143,6 +143,7 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.magnifiedBarsBox.barsBox.correctDigits = correctDigits;
             this.magnifiedBarsBox.setPosition(850, 430);
             this.addChild(this.magnifiedBarsBox);
+            this.magnifiedBarsBox.setVisible(false);
 
             this.divisionTable = new DivisionTable(divisor);
             this.divisionTable.setPosition(this.size.width/2, this.divisionTable.getContentSize().height/2);
