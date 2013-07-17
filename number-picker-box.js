@@ -6,7 +6,7 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
 	var NumberPickerBox = cc.Node.extend({
 
 		numberBoxes:[],
-		boxesPastFirst:8,
+		boxesPastFirst:13,
 		firstBoxShownIndex:null,
 		scrolling:false,
 		layer:null,
@@ -18,16 +18,21 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
 			this.numberBoxes = [];
 
 			var container = new cc.Sprite();
-            container.initWithFile(window.bl.getResource('numberpickerbox'));
+            container.initWithFile(window.bl.getResource('numberpicker_box'));
             this.addChild(container);
 
             this.numberPickerClipper = new CanvasClippingNode();
             this.numberPickerClipper.drawPathToClip = function() {
-                this.ctx.rect(1, -203, 588, 203);
+                this.ctx.rect(1, -208, 918, 206);
             },
             this.numberPickerClipper.setZOrder(-1);
             container.addChild(this.numberPickerClipper);
 
+/*            var testBox = new cc.Sprite();
+            testBox.initWithFile(window.bl.getResource('testbigwhitebox'));
+            testBox.setPosition(500,30);
+            this.numberPickerClipper.addChild(testBox);
+*/
 			this.slideNode = new cc.Node();
 			this.slideNode.setPosition(70, 80);
 			// container.addChild(this.slideNode);
@@ -37,10 +42,10 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
 
             var decimalPoint = new cc.Sprite();
             decimalPoint.initWithFile(window.bl.getResource('decimalpoint'));
-            decimalPoint.setPosition(290, 0);
+            decimalPoint.setPosition(294, 0);
             this.slideNode.addChild(decimalPoint);
 
-			for (var i = 0; i < 8; i++) {
+			for (var i = 0; i < this.boxesPastFirst; i++) {
 				this.addBox();
 			};
 
@@ -50,13 +55,13 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
 
             this.leftButton = new cc.Sprite();
             this.leftButton.initWithFile(window.bl.getResource('numberpicker_left_arrow'));
-            this.leftButton.setPosition(-325, 0);
+            this.leftButton.setPosition(-485, 0);
             this.addChild(this.leftButton);
             this.leftTouch = false;
 
             this.rightButton = new cc.Sprite();
             this.rightButton.initWithFile(window.bl.getResource('numberpicker_right_arrow'));
-            this.rightButton.setPosition(327, 0);
+            this.rightButton.setPosition(486, 0);
             this.addChild(this.rightButton);
             this.rightTouch = false;
 
@@ -114,7 +119,7 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
 			numberBox.numberPickerBox = this;
 			var boxIndex = this.numberBoxes.length;
 			numberBox.power = 3 - boxIndex;
-			var xPosition = 80 * boxIndex;
+			var xPosition = 81 * boxIndex;
 			xPosition += numberBox.power >= 0 ? 0 : 20;
 			numberBox.setPosition(xPosition, 0);
 			this.slideNode.addChild(numberBox);
@@ -175,7 +180,7 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
 
 		setVisibleBoxesBeforeSlide:function() {
 			for (var i = 0; i < this.numberBoxes.length; i++) {
-				if (i >= this.firstBoxShownIndex - 2 && i <= this.firstBoxShownIndex + 7) {
+				if (i >= this.firstBoxShownIndex - 2 && i <= this.firstBoxShownIndex + this.boxesPastFirst - 1) {
 					this.numberBoxes[i].boxVisible(true);
 				} else {
 					this.numberBoxes[i].boxVisible(false);
@@ -186,12 +191,12 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
 
 		setVisibleBoxesAfterSlide:function() {
 			for (var i = 0; i < this.numberBoxes.length; i++) {
-				if (i > this.firstBoxShownIndex - 2 && i < this.firstBoxShownIndex + 7) {
+				if (i > this.firstBoxShownIndex - 2 && i < this.firstBoxShownIndex + this.boxesPastFirst - 1) {
 					this.numberBoxes[i].boxVisible(true);
 				} else {
 					this.numberBoxes[i].boxVisible(false);
 				};
-				if (i > this.firstBoxShownIndex - 1 && i < this.firstBoxShownIndex + 7) {
+				if (i > this.firstBoxShownIndex - 1 && i < this.firstBoxShownIndex + this.boxesPastFirst - 1) {
 					this.numberBoxes[i].boxEnabled(true);
 				} else {
 					this.numberBoxes[i].boxEnabled(false);

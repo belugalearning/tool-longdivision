@@ -59,7 +59,7 @@ define(['constants', 'canvasclippingnode'], function(constants, CanvasClippingNo
 				this.digitNodes.push(digitNode);
 
 				var upButton = new cc.Sprite();
-				upButton.initWithFile(window.bl.getResource('numberpicker_up_arrow'));
+				upButton.initWithFile(window.bl.getResource('numberwheel_up_arrow'));
 				upButton.setPosition(xPosition, 110);
 				this.addChild(upButton);
 				upButton.isUp = true;
@@ -67,7 +67,7 @@ define(['constants', 'canvasclippingnode'], function(constants, CanvasClippingNo
 				this.buttons.push(upButton); 
 
 				var downButton = new cc.Sprite();
-				downButton.initWithFile(window.bl.getResource('numberpicker_down_arrow'));
+				downButton.initWithFile(window.bl.getResource('numberwheel_down_arrow'));
 				downButton.setPosition(xPosition, -120);
 				this.addChild(downButton);
 				downButton.isUp = false;

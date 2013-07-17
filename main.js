@@ -102,7 +102,7 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.questionBox.addChild(this.questionLabel);
 
             this.numberPickerBoxNode = new cc.Node();
-            this.numberPickerBoxNode.setPosition(375, 440);
+            this.numberPickerBoxNode.setPosition(512, 440);
             this.addChild(this.numberPickerBoxNode);
 
             this.numberPickerBox = new NumberPickerBox();
@@ -119,12 +119,11 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.barsBoxNode.addChild(this.barsBox);
             var barsBoundingBox = this.barsBox.getBoundingBox();
 
-            var clearButtonFilename = window.bl.getResource('clear_button');
+            var clearButtonFilename = window.bl.getResource('reset_button');
             var clearButton = new cc.MenuItemImage.create(clearButtonFilename, clearButtonFilename, this.reset, this);
-            clearButton.setPosition(345, 75);
+            clearButton.setPosition(460, 310);
 
             var clearButtonMenu = new cc.Menu.create(clearButton);
-            clearButtonMenu.setPosition(0,0);
             this.addChild(clearButtonMenu);
 
             var lowEdgeLabel = new cc.LabelTTF.create("0", "mikadoBold", 24);
