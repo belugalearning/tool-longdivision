@@ -177,32 +177,3 @@ define(['numberwheel', 'constants'], function(NumberWheel, constants) {
 
 	return SettingsLayer;
 })
-
-/*setupSettingsPage:function() {
-            var settingsBackground = new cc.Sprite();
-            settingsBackground.initWithFile(window.bl.getResource('settings_free_form_bg'));
-            settingsBackground.setPosition(this.size.width/2, this.size.height/2);
-            this.addChild(settingsBackground);
-
-            var dividendLabel = new cc.LabelTTF.create("Dividend:", "mikadoBold", 34);
-            dividendLabel.setPosition(125, 575);
-            settingsBackground.addChild(dividendLabel);
-
-            this.dividendNumberWheel = new NumberWheel(4);
-            this.dividendNumberWheel.setPosition(375, 575);
-            settingsBackground.addChild(this.dividendNumberWheel);
-
-            var divisorLabel = new cc.LabelTTF.create("Divisor:", "mikadoBold", 34);
-            divisorLabel.setPosition(125, 250);
-            settingsBackground.addChild(divisorLabel);
-
-            this.divisorNumberWheel = new NumberWheel(4);
-            this.divisorNumberWheel.setPosition(375, 250);
-            settingsBackground.addChild(this.divisorNumberWheel);
-
-            var tableLabel = new cc.LabelTTF.create("Table:", "mikadoBold", 34);
-            tableLabel.setPosition(700, 400);
-            settingsBackground.addChild(tableLabel);
-
-            
-        },*/
