@@ -102,7 +102,7 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.questionBox.addChild(this.questionLabel);
 
             this.numberPickerBoxNode = new cc.Node();
-            this.numberPickerBoxNode.setPosition(375, 440);
+            this.numberPickerBoxNode.setPosition(512, 440);
             this.addChild(this.numberPickerBoxNode);
 
             this.numberPickerBox = new NumberPickerBox();
@@ -119,13 +119,12 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.barsBoxNode.addChild(this.barsBox);
             var barsBoundingBox = this.barsBox.getBoundingBox();
 
-            var clearButtonFilename = window.bl.getResource('clear_button');
+            var clearButtonFilename = window.bl.getResource('reset_button');
             var clearButton = new cc.MenuItemImage.create(clearButtonFilename, clearButtonFilename, this.reset, this);
-            clearButton.setPosition(345, 75);
+            clearButton.setPosition(460, 310);
 
             var clearButtonMenu = new cc.Menu.create(clearButton);
-            clearButtonMenu.setPosition(0,0);
-            this.numberPickerBoxNode.addChild(clearButtonMenu);
+            this.addChild(clearButtonMenu);
 
             var lowEdgeLabel = new cc.LabelTTF.create("0", "mikadoBold", 24);
             var barsBoxLeftEdge = barsBoundingBox.origin.x;
@@ -141,11 +140,12 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
             this.magnifiedBarsBox = new MagnifiedBarsBox(dividend, divisor);
             this.magnifiedBarsBox.barsBox.correctDigits = correctDigits;
-            this.magnifiedBarsBox.setPosition(850, 430);
+            this.magnifiedBarsBox.setPosition(880, 110);
             this.addChild(this.magnifiedBarsBox);
+            // this.magnifiedBarsBox.setVisible(false);
 
             this.divisionTable = new DivisionTable(divisor);
-            this.divisionTable.setPosition(this.size.width/2, this.divisionTable.getContentSize().height/2);
+            this.divisionTable.setPosition(0, 0);
             this.divisionTable.setupTable(this.numberPickerBox.digitValues());
             this.tableNode.addChild(this.divisionTable);
         },

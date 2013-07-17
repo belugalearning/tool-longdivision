@@ -10,26 +10,39 @@ define([], function() {
 
 		ctor:function() {
 			this._super();
-			var numberContainer = new cc.Sprite();
+/*			var numberContainer = new cc.Sprite();
 			numberContainer.initWithFile(window.bl.getResource('numberbox'));
 			this.addChild(numberContainer);
+*/
+			var background = new cc.Sprite();
+			background.initWithFile(window.bl.getResource('numberpicker_number_bg'));
+			background.setPosition(0, 20);
+			this.addChild(background);
 
 			this.upDownMenu = new cc.Menu.create();
 			this.upDownMenu.setPosition(0,0);
 			this.addChild(this.upDownMenu);
 
-			var upButtonFilename = window.bl.getResource('numberpicker_up_arrow');
+			var upButtonFilename = window.bl.getResource('digitchangehitzone');
             var upButton = new cc.MenuItemImage.create(upButtonFilename, upButtonFilename, this.digitUp, this);
             upButton.setPosition(0, 50);
             this.upDownMenu.addChild(upButton);
+            var upSprite = new cc.Sprite();
+            upSprite.initWithFile(window.bl.getResource('numberpicker_up_arrow'));
+            upSprite.setPosition(upButton.getAnchorPointInPoints());
+            upButton.addChild(upSprite);
 
-            var downButtonFilename = window.bl.getResource('numberpicker_down_arrow');
+            var downButtonFilename = window.bl.getResource('digitchangehitzone');
             var downButton = new cc.MenuItemImage.create(downButtonFilename, downButtonFilename, this.digitDown, this);
             downButton.setPosition(0, -58);
             this.upDownMenu.addChild(downButton);
+            var downSprite = new cc.Sprite();
+            downSprite.initWithFile(window.bl.getResource('numberpicker_down_arrow'));
+            downSprite.setPosition(downButton.getAnchorPointInPoints());
+            downButton.addChild(downSprite);
 
-            this.digitLabel = new cc.LabelTTF.create(this.digit, "mikadoBold", 30);
-            this.digitLabel.setPosition(cc.pAdd(this.getAnchorPointInPoints(), cc.p(-1,1)));
+            this.digitLabel = new cc.LabelTTF.create(this.digit, "mikadoBold", 70);
+            this.digitLabel.setPosition(cc.pAdd(this.getAnchorPointInPoints(), cc.p(-3,1)));
             this.addChild(this.digitLabel);
 		},
 

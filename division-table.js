@@ -1,15 +1,14 @@
 define(['canvasclippingnode', 'constants'], function(CanvasClippingNode, constants) {
 	'use strict';
 
-	var DivisionTable = cc.Sprite.extend({
+	var DivisionTable = cc.Node.extend({
 		ctor:function(divisor) {
 			this._super();
-			this.initWithFile(window.bl.getResource('table_sectionbox'));
 			this.divisor = divisor;
 			this.scrolling = false;
 			this.rows = [];
 			var clippingNode = new CanvasClippingNode();
-			clippingNode.setPosition(100, 0);
+			clippingNode.setPosition(40, 0);
 			clippingNode.drawPathToClip = function() {
 				this.ctx.rect(0, -203, 600, 203);
 			};
@@ -24,13 +23,13 @@ define(['canvasclippingnode', 'constants'], function(CanvasClippingNode, constan
 			var downButton = new cc.MenuItemImage.create(downButtonFilename, downButtonFilename, this.scrollUp, this);
 			downButton.setPosition(0, -55);
 			this.upDownMenu = new cc.Menu.create(upButton, downButton);
-			this.upDownMenu.setPosition(80, 90);
+			this.upDownMenu.setPosition(40, 90);
 			this.addChild(this.upDownMenu);
 			this.upDownMenu.setVisible(false);
 
 			var answerBox = new cc.Sprite();
 			answerBox.initWithFile(window.bl.getResource('table_answerbox'));
-			answerBox.setPosition(800, 100);
+			answerBox.setPosition(630, 150);
 			this.addChild(answerBox);
 			this.answerLabel = new cc.LabelTTF.create("", "mikadoBold", 34);
 			this.answerLabel.setPosition(answerBox.getAnchorPointInPoints());
