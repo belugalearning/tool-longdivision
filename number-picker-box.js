@@ -196,7 +196,7 @@ define(['numberbox', 'canvasclippingnode', 'constants'], function(NumberBox, Can
 				} else {
 					this.numberBoxes[i].boxVisible(false);
 				};
-				if (i > this.firstBoxShownIndex - 1 && i < this.firstBoxShownIndex + this.boxesPastFirst - 1) {
+				if (i > this.firstBoxShownIndex - 1 && i < this.firstBoxShownIndex + this.boxesPastFirst - 2) {
 					this.numberBoxes[i].boxEnabled(true);
 				} else {
 					this.numberBoxes[i].boxEnabled(false);
