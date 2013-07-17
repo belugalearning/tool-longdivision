@@ -71,7 +71,7 @@ define(['canvasclippingnode', 'constants'], function(CanvasClippingNode, constan
 				this.upDownMenu.setVisible(true);
 			};
 			this.setVisibleRows();
-			this.answerLabel.setStringAutoFontSize(this.total, 100);
+			this.answerLabel.setStringAutoFontSize(this.total, 100, 1);
 		},
 
 		setupTableRow:function(digit, power) {
@@ -89,7 +89,7 @@ define(['canvasclippingnode', 'constants'], function(CanvasClippingNode, constan
 			digitLabel.setPosition(digitBox.getAnchorPointInPoints());
 			var digitBoxSize = digitBox.getBoundingBox().size;
 			digitLabel.boundary = cc.SizeMake(digitBoxSize.width - 6, digitBoxSize.height);
-			digitLabel.setStringAutoFontSize(digit, 100);
+			digitLabel.setStringAutoFontSize(digit, 100, 1);
 			digitBox.addChild(digitLabel);
 
 			var multiply = new cc.Sprite();
@@ -106,7 +106,7 @@ define(['canvasclippingnode', 'constants'], function(CanvasClippingNode, constan
 			unitLabel.setColor(color);
 			var unitBoxSize = unitBox.getBoundingBox().size;
 			unitLabel.boundary = cc.SizeMake(unitBoxSize.width - 6, unitBoxSize.height);
-			unitLabel.setStringAutoFontSize(unit, 100);
+			unitLabel.setStringAutoFontSize(unit, 100, 1);
 			unitLabel.setPosition(unitBox.getAnchorPointInPoints());
 			unitBox.addChild(unitLabel);
 
@@ -124,7 +124,7 @@ define(['canvasclippingnode', 'constants'], function(CanvasClippingNode, constan
 			resultLabel.setColor(color);
 			var resultBoxSize = resultBox.getBoundingBox().size;
 			resultLabel.boundary = cc.SizeMake(resultBoxSize.width - 6, resultBoxSize.height);
-			resultLabel.setStringAutoFontSize(result, 100);
+			resultLabel.setStringAutoFontSize(result, 100, 1);
 			resultLabel.setPosition(resultBox.getAnchorPointInPoints());
 			resultBox.addChild(resultLabel);
 			this.total = this.addNumberStrings(this.total, result);

@@ -1,4 +1,4 @@
-define(['bar', 'constants'], function(Bar, constants) {
+define(['bar', 'tooltip', 'constants'], function(Bar, ToolTip, constants) {
 	'use strict';
 
 	var BarsBox = cc.Sprite.extend({
@@ -17,7 +17,6 @@ define(['bar', 'constants'], function(Bar, constants) {
 			this.toolTipNode.setPosition(0, 8);
 			this.addChild(this.toolTipNode);
 			this.toolTipNode.setZOrder(1);
-			this.toolTips = [];
 			// this.testLabel = new cc.LabelTTF.create("Hello", "mikadoBold", 24);
 			// this.testLabel.setPosition()
 			// this.addChild(this.testLabel);
@@ -39,6 +38,15 @@ define(['bar', 'constants'], function(Bar, constants) {
 			};
 			digitKeys.sort(function(a,b){return b-a});
 			var colourIndex = 0;
+			if (this.dividend === 0) {
+				for (var i = 0; i < digitKeys.length; i++) {
+					if (digitValues[digitKeys[i]] !== 0) {
+						var bigBar = new Bar();
+						bar.setColor(cc.c3b(255, 0, 0));
+						bar.setLength(1000);
+					}
+				};
+			};
 			for (var i = 0; i < digitKeys.length; i++) {
 				var digitKey = digitKeys[i];
 				var digit = digitValues[digitKey];
@@ -56,19 +64,14 @@ define(['bar', 'constants'], function(Bar, constants) {
 						this.bars.push(bar);
 						totalValue += value;
 						totalLength += length;
-						
-						var toolTip = new cc.Sprite();
-						toolTip.initWithFile(window.bl.getResource('bar_tooltip'));
+
+						var toolTip = new ToolTip();
+						toolTip.setAutoFontSize(true);
 						toolTip.setPosition(totalLength - 2, 70);
-						var toolTipWidth = toolTip.getContentSize().width;
-						var totalValueRounded = Math.round(totalValue * 1000)/1000;
-						var toolTipLabel = new cc.LabelTTF.create(totalValueRounded, "mikadoBold", 14);
-						toolTipLabel.setColor(cc.c3b(0,0,0));
-						toolTipLabel.setPosition(32, 28);
-						if (length > toolTipWidth) {
+						var totalValueRounded = Math.round(totalValue * 10000)/10000;
+						toolTip.setLabelString(totalValueRounded);
+						if (length > toolTip.getContentSize().width) {
 							this.toolTipNode.addChild(toolTip);
-							toolTip.addChild(toolTipLabel);
-							this.toolTips.push(toolTip);
 						};
 					};
 				} else {

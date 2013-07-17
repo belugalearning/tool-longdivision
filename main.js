@@ -11,6 +11,7 @@ require.config({
         'magnifiedbarsbox': '../../tools/longdivision/magnified-bars-box',
         'divisiontable': '../../tools/longdivision/division-table',
         'settingslayer': '../../tools/longdivision/settings-layer',
+        'tooltip': '../../tools/common/tool-tip',
 	}
 });
 
