@@ -38,15 +38,6 @@ define(['bar', 'tooltip', 'constants'], function(Bar, ToolTip, constants) {
 			};
 			digitKeys.sort(function(a,b){return b-a});
 			var colourIndex = 0;
-			if (this.dividend === 0) {
-				for (var i = 0; i < digitKeys.length; i++) {
-					if (digitValues[digitKeys[i]] !== 0) {
-						var bigBar = new Bar();
-						bar.setColor(cc.c3b(255, 0, 0));
-						bar.setLength(1000);
-					}
-				};
-			};
 			for (var i = 0; i < digitKeys.length; i++) {
 				var digitKey = digitKeys[i];
 				var digit = digitValues[digitKey];
