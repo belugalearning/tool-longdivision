@@ -234,9 +234,8 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
         moveSettingsOff:function() {
             var moveOff = cc.MoveTo.create(0.3, cc.p(0, this.size.height));
-            var settingsInactive = cc.CallFunc.create(function() {this.settingsLayer.active = false}, this);
-            var moveAndSet = cc.Sequence.create(moveOff, settingsInactive);
-            this.settingsLayer.runAction(moveAndSet);
+            this.settingsLayer.runAction(moveOff);
+            this.settingsLayer.active = false;
         },
 
         setLabelType:function(type) {

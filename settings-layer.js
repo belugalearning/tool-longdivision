@@ -76,6 +76,7 @@ define(['numberwheel', 'constants'], function(NumberWheel, constants) {
 		},
 
 		onTouchBegan:function(touch, event) {
+			var active;
 			if (this.active) {
 				var touchLocation = this.convertTouchToNodeSpace(touch);
 				this.dividendWheel.processTouch(touchLocation);
@@ -86,8 +87,11 @@ define(['numberwheel', 'constants'], function(NumberWheel, constants) {
 						button.processTouch.call(this);
 					};
 				};
+				active = true;
+			} else {
+				active = false;
 			};
-			return this.active;
+			return active;
 		},
 
 		toggleTable:function() {
