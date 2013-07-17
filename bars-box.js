@@ -57,6 +57,9 @@ define(['bar', 'tooltip', 'constants'], function(Bar, ToolTip, constants) {
 					var value = Math.pow(10, digitKey) * this.divisor;
 					var length = Math.pow(10, digitKey) * this.scaleFactor();
 					var dummyBar = new Bar();
+					if (dummyBar.isVeryShort(length)) {
+						break;
+					};
 					if (!dummyBar.isShort(length)) {
 						for (var j = 0; j < digit; j++) {
 							var bar = new Bar();

@@ -55,6 +55,10 @@ define([], function() {
 			return length - this.leftMainWidth - this.rightMainWidth < 0;
 		},
 
+		isVeryShort:function(length) {
+			return length < 0.01;
+		},
+
 		setColor:function(color) {
 			this.barLeft.setColor(color);
 			this.barMiddle.setColor(color);
