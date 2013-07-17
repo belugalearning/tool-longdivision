@@ -9,6 +9,7 @@ define(['canvasclippingnode', 'constants'], function(CanvasClippingNode, constan
 			this.scrolling = false;
 			this.rows = [];
 			var clippingNode = new CanvasClippingNode();
+			clippingNode.setPosition(100, 0);
 			clippingNode.drawPathToClip = function() {
 				this.ctx.rect(0, -203, 600, 203);
 			};
@@ -23,7 +24,7 @@ define(['canvasclippingnode', 'constants'], function(CanvasClippingNode, constan
 			var downButton = new cc.MenuItemImage.create(downButtonFilename, downButtonFilename, this.scrollUp, this);
 			downButton.setPosition(0, -55);
 			this.upDownMenu = new cc.Menu.create(upButton, downButton);
-			this.upDownMenu.setPosition(525, 90);
+			this.upDownMenu.setPosition(80, 90);
 			this.addChild(this.upDownMenu);
 			this.upDownMenu.setVisible(false);
 
