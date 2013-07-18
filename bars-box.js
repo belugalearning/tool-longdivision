@@ -95,7 +95,7 @@ define(['bar', 'tooltip', 'constants'], function(Bar, ToolTip, constants) {
 					};
 					colourIndex++;
 				};
-				if (this.isTooBig(digitValues)) {
+				if (this.layer.isTooBig(digitValues)) {
 					var overColour = cc.c3b(255,0,0);
 					for (var i = 0; i < this.bars.length; i++) {
 						this.bars[i].setColor(overColour);
@@ -109,47 +109,7 @@ define(['bar', 'tooltip', 'constants'], function(Bar, ToolTip, constants) {
 			return boxLength * this.divisor / this.dividend;
 		},
 
-		isTooBig:function(digitValues) {
-			var tooBig;
-			var digitsBeforePoint = this.correctDigits[0];
-			var numberOfDigits = digitsBeforePoint.length;
-			if (numberOfDigits > 4) {
-				return false;
-			};
-			for (var i = 0; i < 4 - numberOfDigits; i++) {
-				digitsBeforePoint.splice(0, 0, 0);
-			};
-			for (var i = digitsBeforePoint.length - 1; i >= 0; i--) {
-				var enteredDigit = digitValues[i];
-				var correctDigit = digitsBeforePoint[3 - i];
-				if (enteredDigit > correctDigit) {
-					return true;
-				} else if (enteredDigit < correctDigit) {
-					return false;
-				};
-			};
-			var index = 0;
-			var nonRecurringDigits = this.correctDigits[1];
-			var recurringDigits = this.correctDigits[2];
-			while (true) {
-				if (digitValues[-index-1] === undefined) {
-					return false;
-				};
-				var enteredDigit = digitValues[-index-1];
-				var correctDigit = null;
-				if (index < nonRecurringDigits.length) {
-					correctDigit = nonRecurringDigits[index];
-				} else {
-					correctDigit = recurringDigits[(index - nonRecurringDigits.length) % recurringDigits.length];
-				};
-				if (enteredDigit > correctDigit) {
-					return true;
-				} else if (enteredDigit < correctDigit) {
-					return false;
-				};
-				index++;
-			};
-		}
+
 
 
 

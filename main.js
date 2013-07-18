@@ -95,7 +95,7 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.dividend = dividend;
             this.divisor = divisor;
 
-            var correctDigits = this.calculateCorrectDigits(dividend, divisor);
+            this.correctDigits = this.calculateCorrectDigits(dividend, divisor);
 
             this.questionLabel = new cc.LabelTTF.create(dividend + " divided by " + divisor, "mikadoBold", 30);
             this.questionLabel.setPosition(this.questionBox.getAnchorPointInPoints());
@@ -115,7 +115,7 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.addChild(this.barsBoxNode);
 
             this.barsBox = new BarsBox(dividend, divisor);
-            this.barsBox.correctDigits = correctDigits;
+            this.barsBox.layer = this;
             this.barsBoxNode.addChild(this.barsBox);
             var barsBoundingBox = this.barsBox.getBoundingBox();
 
@@ -139,7 +139,7 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.barsBoxNode.addChild(highEdgeLabel);
 
             this.magnifiedBarsBox = new MagnifiedBarsBox(dividend, divisor);
-            this.magnifiedBarsBox.barsBox.correctDigits = correctDigits;
+            this.magnifiedBarsBox.barsBox.layer = this;
             this.magnifiedBarsBox.setPosition(880, 110);
             this.addChild(this.magnifiedBarsBox);
             // this.magnifiedBarsBox.setVisible(false);
@@ -148,6 +148,9 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.divisionTable.setPosition(0, 0);
             this.divisionTable.setupTable(this.numberPickerBox.digitValues());
             this.tableNode.addChild(this.divisionTable);
+            if (this.dividend === 0) {
+                this.divisionTable.setAnswerCorrect(true);
+            };
         },
 
         reset:function() {
@@ -183,6 +186,61 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.barsBox.setBars(digitValues);
             this.magnifiedBarsBox.setBars(digitValues);
             this.divisionTable.setupTable(digitValues);
+            this.divisionTable.setAnswerCorrect(this.correctDigitsSelected(digitValues));
+        },
+
+        correctDigitsSelected:function(digitValues) {
+            return this.compareDigitsWithAnswer(digitValues) === 0;
+        },
+
+        isTooBig:function(digitValues) {
+            return this.compareDigitsWithAnswer(digitValues) === 1;
+        },
+
+        compareDigitsWithAnswer:function(digitValues) {
+            var digitsBeforePoint = this.correctDigits[0];
+            var numberOfDigits = digitsBeforePoint.length;
+            if (numberOfDigits > 4) {
+                return -1;
+            };
+            for (var i = 0; i < 4 - numberOfDigits; i++) {
+                digitsBeforePoint.splice(0, 0, 0);
+            };
+            for (var i = digitsBeforePoint.length - 1; i >= 0; i--) {
+                var enteredDigit = digitValues[i];
+                var correctDigit = digitsBeforePoint[3 - i];
+                if (enteredDigit > correctDigit) {
+                    return 1;
+                } else if (enteredDigit < correctDigit) {
+                    return -1;
+                };
+            };
+            var index = 0;
+            var nonRecurringDigits = this.correctDigits[1];
+            var recurringDigits = this.correctDigits[2];
+            while (true) {
+                if (digitValues[-index-1] === undefined) {
+                    if (recurringDigits.length > 1 || recurringDigits[0] !== 0) {
+                        return -1;
+                    } else {
+                        return 0;
+                    };
+
+                };
+                var enteredDigit = digitValues[-index-1];
+                var correctDigit = null;
+                if (index < nonRecurringDigits.length) {
+                    correctDigit = nonRecurringDigits[index];
+                } else {
+                    correctDigit = recurringDigits[(index - nonRecurringDigits.length) % recurringDigits.length];
+                };
+                if (enteredDigit > correctDigit) {
+                    return 1;
+                } else if (enteredDigit < correctDigit) {
+                    return -1;
+                };
+                index++;
+            };
         },
 
         calculateCorrectDigits:function(dividend, divisor) {

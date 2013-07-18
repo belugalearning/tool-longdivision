@@ -243,6 +243,11 @@ define(['canvasclippingnode', 'constants'], function(CanvasClippingNode, constan
 			};
 			return sumArray;
 		},
+
+		setAnswerCorrect:function(correct) {
+			var color = correct ? cc.c3b(0,255,0) : cc.c3b(255, 255, 255);
+			this.answerLabel.setColor(color);
+		},
 	});
 
 	return DivisionTable;
