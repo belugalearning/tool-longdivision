@@ -3,7 +3,7 @@ require.config({
         'toollayer': '../../tools/common/toollayer',
         'numberwheel': '../../tools/longdivision/number-wheel',
         'constants': '../../tools/longdivision/constants',
-        'canvasclippingnode': '../../tools/longdivision/canvas-clipping-node',
+        'canvasclippingnode': '../../tools/common/canvas-clipping-node',
         'numberpickerbox': '../../tools/longdivision/number-picker-box',
         'numberbox': '../../tools/longdivision/number-box',
         'barsbox': '../../tools/longdivision/bars-box',
