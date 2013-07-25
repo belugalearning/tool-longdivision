@@ -10,12 +10,13 @@ require.config({
         'bar': '../../tools/longdivision/bar',
         'magnifiedbarsbox': '../../tools/longdivision/magnified-bars-box',
         'divisiontable': '../../tools/longdivision/division-table',
-        'settingslayer': '../../tools/longdivision/settings-layer',
         'tooltip': '../../tools/common/tool-tip',
+        'longdivisionsettingslayer': '../../tools/longdivision/long-division-settings-layer',
+        'buttonsprite' :'../../tools/common/button-sprite'
 	}
 });
 
-define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpickerbox', 'barsbox', 'magnifiedbarsbox', 'divisiontable', 'settingslayer', 'constants', 'canvasclippingnode'], function(exports, cocos2d, ToolLayer, QLayer, NumberWheel, NumberPickerBox, BarsBox, MagnifiedBarsBox, DivisionTable, SettingsLayer, constants, CanvasClippingNode) {
+define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpickerbox', 'barsbox', 'magnifiedbarsbox', 'divisiontable', 'longdivisionsettingslayer', 'constants', 'canvasclippingnode'], function(exports, cocos2d, ToolLayer, QLayer, NumberWheel, NumberPickerBox, BarsBox, MagnifiedBarsBox, DivisionTable, LongDivisionSettingsLayer, constants, CanvasClippingNode) {
 	'use strict';
 
     window.bl.toolTag = 'longdivision';
@@ -60,7 +61,8 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
             this.setupWithNumbers(this.dividend, this.divisor);
 
-            var settingsButtonBase = new cc.Sprite();
+/*            var settingsButtonBase = new cc.Sprite();
+
             settingsButtonBase.initWithFile(window.bl.getResource('settings_settings_button_base'));
             settingsButtonBase.setPosition(settingsButtonBase.getContentSize().width/2, 700);
             this.addChild(settingsButtonBase);
@@ -71,22 +73,19 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
             var settingsButtonMenu = new cc.Menu.create(settingsButton);
             settingsButtonMenu.setPosition(0,0);
-            settingsButtonBase.addChild(settingsButtonMenu);
+            settingsButtonBase.addChild(settingsButtonMenu);*/
 
-            this.settingsLayer = new SettingsLayer();
-            this.settingsLayer.setPosition(0, size.height * 3/2);
-            // this.settingsLayer.setPosition(0,0);
-            this.settingsLayer.setZOrder(100);
+            this.settingsLayer = new LongDivisionSettingsLayer();
+            this.addChild(this.settingsLayer);
             this.settingsLayer.mainLayer = this;
+            this.settingsLayer.setNumbers(this.dividend, this.divisor);
+            this.settingsLayer.setZOrder(100);
+
+/*            this.settingsLayer = new SettingsLayer();
+            this.settingsLayer.setPosition(0, size.height * 3/2);
             this.addChild(this.settingsLayer);
             this.settingsLayer.setTouchPriority(-200);
-            this.settingsLayer.setNumbers(this.dividend, this.divisor);
-/*            var action = cc.MoveTo.create(0.3, cc.p(0,0));
-            this.settingsLayer.runAction(action);
-*/
-
-            // this.settingsLayer.removeFromParent();
-
+            */
 
             return this;
 		},
@@ -173,8 +172,10 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
         onTouchesBegan:function(touches, event) {
             var touchLocation = this.convertTouchToNodeSpace(touches[0]);
+
             this.numberPickerBox.processTouch(touchLocation);
             //this.testLabel.setString(JSON.stringify(this.numberPickerBox.valueString()));
+
         },
 
         onTouchesEnded:function(touches, event) {
@@ -284,17 +285,7 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.tableNode.setVisible(visible);
         },
 
-        moveSettingsOn:function() {
-            var moveOn = cc.MoveTo.create(0.3, cc.p(0,0));
-            this.settingsLayer.runAction(moveOn);
-            this.settingsLayer.active = true;
-        },
 
-        moveSettingsOff:function() {
-            var moveOff = cc.MoveTo.create(0.3, cc.p(0, this.size.height));
-            this.settingsLayer.runAction(moveOff);
-            this.settingsLayer.active = false;
-        },
 
         setLabelType:function(type) {
             this.labelType = type;
