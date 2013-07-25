@@ -4,6 +4,10 @@ define(['numberwheel', 'settingslayer', 'buttonsprite', 'constants'], function(N
 	var NumberPickerLabels = constants['NumberPickerLabels'];
 
 	var LongDivisionSettingsLayer = SettingsLayer.extend({
+		
+		backgroundFilename:'long_div_settings_bg',
+		settingsButtonPosition:cc.p(56, 700),
+
 		ctor:function() {
 			this._super();
 
@@ -58,10 +62,6 @@ define(['numberwheel', 'settingslayer', 'buttonsprite', 'constants'], function(N
             this.background.addChild(this.numbersButton);
 
             this.touchProcessors = [this.dividendWheel, this.divisorWheel, this.tableButton, this.closeButton, this.wordsButton, this.powersButton, this.numbersButton];
-		},
-
-		getBackgroundFileName:function() {
-			return 'long_div_settings_bg';
 		},
 
 		registerWithTouchDispatcher:function() {

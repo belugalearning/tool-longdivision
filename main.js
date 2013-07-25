@@ -61,31 +61,11 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
             this.setupWithNumbers(this.dividend, this.divisor);
 
-/*            var settingsButtonBase = new cc.Sprite();
-
-            settingsButtonBase.initWithFile(window.bl.getResource('settings_settings_button_base'));
-            settingsButtonBase.setPosition(settingsButtonBase.getContentSize().width/2, 700);
-            this.addChild(settingsButtonBase);
-
-            var settingsButtonFilename = window.bl.getResource('settings_settings_button');
-            var settingsButton = new cc.MenuItemImage.create(settingsButtonFilename, settingsButtonFilename, this.moveSettingsOn, this);
-            settingsButton.setPosition(70, 42);
-
-            var settingsButtonMenu = new cc.Menu.create(settingsButton);
-            settingsButtonMenu.setPosition(0,0);
-            settingsButtonBase.addChild(settingsButtonMenu);*/
-
             this.settingsLayer = new LongDivisionSettingsLayer();
             this.addChild(this.settingsLayer);
             this.settingsLayer.mainLayer = this;
             this.settingsLayer.setNumbers(this.dividend, this.divisor);
             this.settingsLayer.setZOrder(100);
-
-/*            this.settingsLayer = new SettingsLayer();
-            this.settingsLayer.setPosition(0, size.height * 3/2);
-            this.addChild(this.settingsLayer);
-            this.settingsLayer.setTouchPriority(-200);
-            */
 
             return this;
 		},
