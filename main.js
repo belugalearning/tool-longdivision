@@ -69,6 +69,13 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             var settingsButton = new cc.MenuItemImage.create(settingsButtonFilename, settingsButtonFilename, this.moveSettingsOn, this);
             settingsButton.setPosition(70, 42);
 
+            var clearButtonFilename = window.bl.getResource('reset_button');
+            var clearButton = new cc.MenuItemImage.create(clearButtonFilename, clearButtonFilename, this.reset, this);
+            clearButton.setPosition(460, 310);
+
+            var clearButtonMenu = new cc.Menu.create(clearButton);
+            this.addChild(clearButtonMenu);
+
             var settingsButtonMenu = new cc.Menu.create(settingsButton);
             settingsButtonMenu.setPosition(0,0);
             settingsButtonBase.addChild(settingsButtonMenu);
@@ -118,13 +125,6 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.barsBox.layer = this;
             this.barsBoxNode.addChild(this.barsBox);
             var barsBoundingBox = this.barsBox.getBoundingBox();
-
-            var clearButtonFilename = window.bl.getResource('reset_button');
-            var clearButton = new cc.MenuItemImage.create(clearButtonFilename, clearButtonFilename, this.reset, this);
-            clearButton.setPosition(460, 310);
-
-            var clearButtonMenu = new cc.Menu.create(clearButton);
-            this.addChild(clearButtonMenu);
 
             var lowEdgeLabel = new cc.LabelTTF.create("0", "mikadoBold", 24);
             var barsBoxLeftEdge = barsBoundingBox.origin.x;
