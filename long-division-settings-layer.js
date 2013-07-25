@@ -61,7 +61,7 @@ define(['numberwheel', 'settingslayer', 'buttonsprite', 'constants'], function(N
             this.numbersButton.target = this;
             this.background.addChild(this.numbersButton);
 
-            this.touchProcessors = [this.dividendWheel, this.divisorWheel, this.tableButton, this.closeButton, this.wordsButton, this.powersButton, this.numbersButton];
+            this.touchProcessors = this.touchProcessors.concat([this.dividendWheel, this.divisorWheel, this.tableButton, this.wordsButton, this.powersButton, this.numbersButton]);
 		},
 
 		registerWithTouchDispatcher:function() {
