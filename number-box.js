@@ -10,10 +10,7 @@ define([], function() {
 
 		ctor:function() {
 			this._super();
-/*			var numberContainer = new cc.Sprite();
-			numberContainer.initWithFile(window.bl.getResource('numberbox'));
-			this.addChild(numberContainer);
-*/
+
 			var background = new cc.Sprite();
 			background.initWithFile(window.bl.getResource('numberpicker_number_bg'));
 			background.setPosition(0, 20);
