@@ -80,6 +80,23 @@ define(['canvasclippingnode', 'constants'], function(CanvasClippingNode, constan
 
 			var color = constants['colors'].indexWraparound(power);
 
+			var divisorBox = new cc.Sprite();
+			divisorBox.initWithFile(window.bl.getResource('table_box'))
+			// divisorBox.setPosition(150, 0);
+			rowNode.addChild(divisorBox);
+			var divisorLabel = new cc.LabelTTF.create("", "mikadoBold", 100);
+			divisorLabel.setColor(color);
+			var divisorBoxSize = divisorBox.getBoundingBox().size;
+			divisorLabel.boundary = cc.SizeMake(divisorBoxSize.width - 6, divisorBoxSize.height);
+			divisorLabel.setStringAutoFontSize(this.divisor, 100, 0.1);
+			divisorLabel.setPosition(divisorBox.getAnchorPointInPoints());
+			divisorBox.addChild(divisorLabel);
+
+			var multiply = new cc.Sprite();
+			multiply.initWithFile(window.bl.getResource('table_x'));
+			multiply.setPosition(75, 0);
+			rowNode.addChild(multiply);
+
 			var digitBox = new cc.Sprite();
 			digitBox.initWithFile(window.bl.getResource('table_box'));
 			digitBox.setPosition(150, 0);
@@ -92,26 +109,6 @@ define(['canvasclippingnode', 'constants'], function(CanvasClippingNode, constan
 			digitLabel.boundary = cc.SizeMake(digitBoxSize.width - 6, digitBoxSize.height);
 			digitLabel.setStringAutoFontSize(digitPower, 100, 0.1);
 			digitBox.addChild(digitLabel);
-
-			var multiply = new cc.Sprite();
-			multiply.initWithFile(window.bl.getResource('table_x'));
-			multiply.setPosition(75, 0);
-			rowNode.addChild(multiply);
-
-			var unitBox = new cc.Sprite();
-			unitBox.initWithFile(window.bl.getResource('table_box'))
-			// unitBox.setPosition(150, 0);
-			rowNode.addChild(unitBox);
-			var unit = this.divisor;
-			// var unit = this.numberTimesPowerOfTenString(this.divisor, power);
-			// var unit = this.numberTimesPowerOfTenString(this.divisor, power);
-			var unitLabel = new cc.LabelTTF.create("", "mikadoBold", 100);
-			unitLabel.setColor(color);
-			var unitBoxSize = unitBox.getBoundingBox().size;
-			unitLabel.boundary = cc.SizeMake(unitBoxSize.width - 6, unitBoxSize.height);
-			unitLabel.setStringAutoFontSize(unit, 100, 0.1);
-			unitLabel.setPosition(unitBox.getAnchorPointInPoints());
-			unitBox.addChild(unitLabel);
 
 			var equals = new cc.Sprite();
 			equals.initWithFile(bl.getResource('table_='));
