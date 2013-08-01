@@ -46,14 +46,9 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             clc.addChild(background);
             this.addChild(clc,0);
 
-            var title = new cc.Sprite();
-            title.initWithFile(window.bl.getResource('title_longdivision'));
-            title.setPosition(size.width/2, 700);
-            this.addChild(title);
-
             this.questionBox = new cc.Sprite();
             this.questionBox.initWithFile(window.bl.getResource('question_tray'));
-            this.questionBox.setPosition(size.width/2, 600);
+            this.questionBox.setPosition(size.width/2, 700);
             this.addChild(this.questionBox);
 
             this.tableNode = new cc.Node();
@@ -89,7 +84,7 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             this.questionBox.addChild(this.questionLabel);
 
             this.numberPickerBoxNode = new cc.Node();
-            this.numberPickerBoxNode.setPosition(512, 440);
+            this.numberPickerBoxNode.setPosition(512, 490);
             this.addChild(this.numberPickerBoxNode);
 
             this.numberPickerBox = new NumberPickerBox();
