@@ -46,11 +46,6 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
             clc.addChild(background);
             this.addChild(clc,0);
 
-            this.questionBox = new cc.Sprite();
-            this.questionBox.initWithFile(window.bl.getResource('question_tray'));
-            this.questionBox.setPosition(size.width/2, 700);
-            this.addChild(this.questionBox);
-
             this.tableNode = new cc.Node();
             this.addChild(this.tableNode);
 
@@ -79,9 +74,9 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
 
             this.correctDigits = this.calculateCorrectDigits(dividend, divisor);
 
-            this.questionLabel = new cc.LabelTTF.create(dividend + " divided by " + divisor, "mikadoBold", 30);
-            this.questionLabel.setPosition(this.questionBox.getAnchorPointInPoints());
-            this.questionBox.addChild(this.questionLabel);
+            this.setQuestion({
+                'text': "What is " + dividend + " divided by " + divisor + '?'
+            });
 
             this.numberPickerBoxNode = new cc.Node();
             this.numberPickerBoxNode.setPosition(512, 490);
@@ -138,7 +133,6 @@ define(['exports', 'cocos2d', 'toollayer', 'qlayer', 'numberwheel', 'numberpicke
         },
 
         clearEverything:function() {
-            this.questionLabel.removeFromParent();
             this.numberPickerBox.removeFromParent();
             this.barsBoxNode.removeFromParent();
             this.magnifiedBarsBox.removeFromParent();
